@@ -1,9 +1,9 @@
 import { Shell } from "../../../components/shared";
-import ExamEditor from "../../../components/exam-editor";
+import EditorScreen from "@/screens/editor/EditorScreen";
 export default function Page() {
   return (
     <Shell>
-      <ExamEditor />
+      <EditorScreen />
     </Shell>
   );
 }

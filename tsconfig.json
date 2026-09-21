@@ -21,14 +21,27 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@engine/*": [
+        "lib/*"
+      ],
+      "@ui/*": [
+        "components/*"
+      ]
+    }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    ".next-registration/types/**/*.ts",
     ".next/types/**/*.ts",
     "next-env.d.ts",
-    ".next-registration/types/**/*.ts"
+    ".next-regression/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

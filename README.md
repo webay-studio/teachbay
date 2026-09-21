@@ -48,7 +48,7 @@ npm start
 | `lib/print.ts` | 폰트·이미지 DOM 준비·decode·레이아웃 프레임을 기다린 후 브라우저 출력 요청 |
 | `components/shared.tsx` | 공통 내비게이션, 이미지 URL 수명 관리, 확대/편집 모달 |
 | `components/cropper.tsx` | 포인터 선택 및 키보드 범위 조절, 원본 해상도 Canvas 자르기 |
-| `components/exam-editor.tsx` | 제작 흐름과 직렬화된 초안 자동 저장 |
+| `src/screens/editor/EditorScreen.tsx` | 시험지 제작 화면 조립 (`_handler`에서 초안 자동 저장 조율) |
 | `components/exam-renderer.tsx` | 미리보기·인쇄 공용 시험지 렌더러 |
 | `app/globals.css` | 반응형 화면 및 별도 인쇄 스타일 |
 

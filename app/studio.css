@@ -1,0 +1,635 @@
+/* The studio shell is screen-only so document pagination stays unchanged. */
+@media screen {
+  body {
+    @apply bg-canvas;
+    font-family: Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  .studio-workspace {
+    @apply block;
+  }
+  .studio-workspace .main-wrap {
+    @apply w-full;
+    margin: 0;
+    min-height: calc(100dvh - 96px);
+  }
+
+  .studio-brand img {
+    @apply block h-auto;
+    width: 36px;
+  }
+
+  .studio-nav a {
+    @apply text-[13px] relative;
+    color: #6b7282;
+    padding: 12px 0;
+  }
+  .studio-nav a.active {
+    @apply text-brand font-bold;
+  }
+  .studio-nav a.active::after {
+    @apply absolute rounded-full bg-brand;
+    content: "";
+    bottom: 2px;
+    left: calc(50% - 2px);
+    width: 4px;
+    height: 4px;
+  }
+  .studio-workspace main {
+    @apply w-full;
+    max-width: 1232px;
+    margin: 0 auto;
+    padding: 46px 36px 64px;
+  }
+  .studio-workspace main:has(.editor-layout),
+  .studio-workspace main:has(.registration-review) {
+    max-width: 1560px;
+    padding: 24px 36px;
+  }
+  .studio-workspace main:has(.registration-page) {
+    padding: 32px 36px;
+  }
+
+  .studio-footer > span:first-child {
+    @apply font-extrabold text-ink;
+    font-size: 23px;
+    letter-spacing: -1px;
+  }
+  .studio-footer small {
+    @apply text-[11px] font-normal;
+
+    letter-spacing: -0.2px;
+    margin-left: 16px;
+    color: #8a93a4;
+  }
+  .studio-footer > span:last-child {
+    @apply flex items-center text-[10px];
+
+    gap: 7px;
+  }
+  .skip-link {
+    @apply fixed;
+    top: -80px;
+    left: 20px;
+    z-index: 200;
+    background: white;
+    padding: 14px;
+    border: 2px solid var(--accent);
+  }
+  .skip-link:focus {
+    top: 12px;
+  }
+  .btn {
+    @apply rounded-full;
+    padding: 12px 21px;
+    min-height: 43px;
+    transition:
+      background 150ms,
+      box-shadow 150ms;
+  }
+  .btn.primary {
+    @apply bg-brand border-brand;
+
+    box-shadow: 0 3px 8px #2463eb20;
+  }
+  .btn.primary:hover {
+    @apply bg-brand-dark border-brand-dark;
+
+    box-shadow: 0 5px 14px #2463eb30;
+  }
+  .btn:hover {
+    background: #f0f4fc;
+  }
+  input:focus,
+  textarea:focus {
+    box-shadow: 0 0 0 3px #2463eb14;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  select:focus-visible,
+  summary:focus-visible {
+    outline-color: var(--accent);
+  }
+  .eyebrow {
+    @apply text-[10px];
+    color: #6f8db9;
+    letter-spacing: 2px;
+  }
+  .heading {
+    min-height: 170px;
+    margin-bottom: 32px;
+    gap: 28px;
+  }
+  .heading h1 {
+    font-size: clamp(30px, 3.3vw, 43px);
+    line-height: 1.35;
+    letter-spacing: -1.8px;
+    font-weight: 750;
+  }
+  .heading p {
+    @apply text-[13px];
+    color: #788194;
+    margin-top: 17px;
+  }
+  .heading .eyebrow {
+    margin-bottom: 17px;
+  }
+  .library-toolbar {
+    border-top: 1px solid var(--line);
+    border-bottom: 0;
+    padding-top: 16px;
+    gap: 18px;
+  }
+  .tabs > span {
+    @apply text-xs;
+    border: 0;
+    color: #747e91;
+  }
+  .tabs b {
+    @apply text-brand;
+    background: #edf3ff;
+  }
+  .search {
+    @apply rounded-full;
+    width: 290px;
+    background: #f6f8fc;
+    border-color: transparent;
+    padding: 0 16px;
+  }
+  .search:focus-within {
+    @apply border-brand;
+    box-shadow: 0 0 0 3px #2463eb12;
+  }
+  .search input {
+    min-height: 40px;
+  }
+  .sort {
+    color: #8490a4;
+  }
+  .empty {
+    @apply gap-4;
+    margin-top: 24px;
+    min-height: 340px;
+    border: 1px solid #e7ecf7;
+    border-radius: 16px;
+    background: radial-gradient(ellipse at 50% 0, #edf3ff, #f9fbff 65%);
+    color: #7b879d;
+  }
+  .empty h2 {
+    color: #313f59;
+    font-size: 21px;
+    letter-spacing: -0.7px;
+  }
+  .empty p {
+    max-width: 430px;
+  }
+  .empty-icon {
+    @apply text-brand;
+    background: #e2ebff;
+    border-radius: 20px;
+    width: 68px;
+    height: 68px;
+    margin-bottom: 8px;
+  }
+  .question-card,
+  .exam-card {
+    border-color: #e5eaf3;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #27385904;
+  }
+  .question-card:hover,
+  .exam-card:hover {
+    border-color: #b7ccf8;
+    box-shadow: 0 8px 24px #2463eb0b;
+  }
+  .question-card.selected {
+    @apply border-brand;
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .card-image {
+    background: #f1f4fa;
+    border-radius: 11px 11px 0 0;
+  }
+  .card-bottom {
+    padding: 19px;
+  }
+  .card-bottom h3 {
+    @apply text-[13px];
+  }
+  .selection-bar {
+    left: 50%;
+    border-radius: 20px;
+    border-color: #dbe5fc;
+    box-shadow: 0 12px 45px #203b7120;
+  }
+  .editor-settings {
+    border-radius: 12px;
+    background: #f5f7fc;
+  }
+  .preview-area,
+  .saved-preview {
+    background: #edf1f8;
+    border-color: #dce4f1;
+  }
+  .registration-file-action:has(.upload-welcome) {
+    @apply text-center;
+    padding-bottom: 52px;
+    border: 1px solid #e2eafa;
+    border-radius: 18px;
+    background: radial-gradient(ellipse at 50% 0, #edf3ff, #fafcff 70%);
+  }
+  .registration-file-action:has(.upload-welcome) .heading {
+    @apply justify-center;
+    padding: 36px 24px 0;
+    min-height: 150px;
+    margin-bottom: 25px;
+  }
+  .registration-file-action .heading h1 {
+    font-size: clamp(26px, 3vw, 36px);
+  }
+  .upload-welcome {
+    @apply flex flex-col items-center;
+
+    gap: 15px;
+    margin: 12px 20px 26px;
+  }
+  .upload-welcome > svg {
+    @apply text-brand;
+    box-sizing: content-box;
+    padding: 22px;
+    border-radius: 22px;
+    background: #e1eaff;
+  }
+  .upload-welcome h2 {
+    color: #3b4b68;
+    font-size: 19px;
+  }
+  .upload-welcome p {
+    @apply text-xs;
+    color: #7b879d;
+  }
+  .upload-welcome span {
+    @apply text-[10px];
+    margin-top: 6px;
+    letter-spacing: 1px;
+    color: #8497b8;
+  }
+  .registration-page .registration-review {
+    height: calc(100dvh - 275px);
+  }
+  .studio-landing {
+    background: radial-gradient(
+      ellipse 80% 600px at 65% 0,
+      #edf3ff,
+      transparent
+    );
+  }
+  .studio-landing > main {
+    padding: 0 44px;
+    max-width: 1232px;
+    margin: auto;
+  }
+  .landing-how {
+    @apply text-xs;
+    margin-left: auto;
+    color: #788194;
+  }
+
+  .landing-hero .eyebrow {
+    margin-bottom: 22px;
+  }
+  .landing-hero h1 {
+    @apply font-extrabold;
+    font-size: clamp(40px, 5vw, 66px);
+    line-height: 1.23;
+    letter-spacing: -3.5px;
+  }
+  .landing-hero h1 > span {
+    @apply text-brand;
+  }
+  .landing-hero p {
+    @apply text-sm;
+    margin-top: 26px;
+    color: #7f8899;
+    line-height: 1.9;
+  }
+  .landing-hero .btn {
+    @apply text-[13px];
+    margin-top: 30px;
+    padding: 15px 27px;
+    gap: 22px;
+  }
+  .landing-hero > small {
+    @apply flex items-center justify-center text-[10px];
+
+    gap: 6px;
+    margin-top: 18px;
+    color: #8d99af;
+  }
+  .landing-hero > small svg {
+    @apply text-brand;
+  }
+  .studio-feature {
+    @apply relative isolate overflow-hidden grid items-center text-white;
+
+    grid-template-columns: 1fr 1fr;
+    min-height: 440px;
+    border-radius: 10px;
+    background: linear-gradient(120deg, #091746, #1647c9 58%, #3474ff);
+    padding: 52px 65px;
+  }
+
+  .feature-copy .eyebrow {
+    font-size: 9px;
+    color: #a0bcff;
+    letter-spacing: 1.6px;
+  }
+  .feature-copy h2 {
+    font-size: clamp(28px, 3vw, 40px);
+    letter-spacing: -1.5px;
+    line-height: 1.45;
+    margin: 24px 0 20px;
+  }
+  .feature-copy p {
+    @apply text-xs;
+    color: #b4c9fa;
+    line-height: 1.9;
+  }
+  .feature-link {
+    @apply inline-flex items-center text-xs;
+    margin-top: 28px;
+    padding: 0 0 10px;
+
+    gap: 38px;
+    border-bottom: 1px solid #ffffff40;
+  }
+
+  .studio-paper {
+    @apply absolute;
+    width: 240px;
+    height: 310px;
+    background: #fffefa;
+    border-radius: 4px;
+    box-shadow: 0 24px 45px #00164840;
+  }
+  .studio-paper.back {
+    transform: translate(20px, 5px) rotate(10deg);
+    background: #adc8ff;
+  }
+  .studio-paper.front {
+    transform: rotate(-9deg);
+    padding: 26px;
+    color: #24324d;
+  }
+  .studio-paper.front > span:first-child {
+    font-size: 7px;
+    letter-spacing: 1.7px;
+    color: #8093b5;
+  }
+  .studio-paper h3 {
+    @apply font-extrabold;
+    font-size: 28px;
+    line-height: 1.2;
+    margin-top: 17px;
+    letter-spacing: -1px;
+  }
+  .paper-rule {
+    height: 1px;
+    background: #dce1eb;
+    margin: 20px 0;
+  }
+  .art-question {
+    @apply flex;
+    gap: 13px;
+    margin-top: 17px;
+  }
+  .art-question b {
+    @apply text-brand text-[10px];
+  }
+  .art-question > div {
+    @apply flex-1;
+  }
+  .art-question i {
+    @apply block;
+    height: 3px;
+    background: #dfe5ee;
+    margin: 4px 0 7px;
+  }
+  .art-question i:last-child {
+    width: 65%;
+  }
+  .art-paper-footer {
+    @apply absolute;
+    bottom: 20px;
+    font-size: 7px;
+    color: #8195b8;
+    letter-spacing: 1px;
+  }
+  .art-orbit {
+    @apply rounded-full absolute;
+    width: 470px;
+    height: 470px;
+    border: 60px solid #8bb5ff2e;
+
+    top: -170px;
+    right: -170px;
+    box-shadow: inset 0 2px 8px #b4ceff30;
+  }
+  .art-sticker {
+    @apply absolute flex items-center gap-2 text-xs;
+    bottom: 28px;
+    right: -10px;
+    background: #d9f2bc;
+    color: #34543c;
+    padding: 15px 18px;
+
+    transform: rotate(8deg);
+    box-shadow: 0 6px 15px #0002;
+  }
+
+  .landing-steps > h2 {
+    margin-top: 18px;
+    font-size: 30px;
+    letter-spacing: -1.2px;
+  }
+
+  .step-grid small {
+    @apply text-[10px];
+    margin-left: 17px;
+    color: #9aaac5;
+  }
+  .step-grid h3 {
+    @apply text-base;
+    margin: 22px 0 12px;
+  }
+  .step-grid p {
+    @apply text-xs;
+    line-height: 1.9;
+    color: #8a93a4;
+  }
+}
+
+@media screen and (max-width: 900px) {
+
+  .studio-workspace main,
+  .studio-workspace main:has(.editor-layout),
+  .studio-workspace main:has(.registration-review),
+  .studio-workspace main:has(.registration-page) {
+    padding: 30px 24px;
+  }
+  .heading {
+    min-height: 150px;
+  }
+  .studio-feature {
+    padding: 36px;
+  }
+  .studio-paper {
+    width: 200px;
+    height: 290px;
+  }
+  .art-sticker {
+    @apply text-[10px];
+    right: -16px;
+  }
+
+  .registration-page .registration-review {
+    @apply h-auto;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .studio-brand img {
+    width: 30px;
+  }
+
+  .studio-header .btn {
+    @apply text-[11px];
+    padding: 10px 14px;
+    min-height: 36px;
+  }
+  .studio-workspace main,
+  .studio-workspace main:has(.editor-layout),
+  .studio-workspace main:has(.registration-review),
+  .studio-workspace main:has(.registration-page) {
+    padding: 20px 20px 40px;
+  }
+  .heading {
+    @apply flex flex-wrap;
+
+    min-height: 0;
+    padding: 16px 0 20px;
+    gap: 22px;
+    margin-bottom: 16px;
+  }
+  .heading > div:first-child {
+    @apply w-full;
+  }
+  .heading h1 {
+    font-size: 29px;
+    letter-spacing: -1.3px;
+  }
+  .heading p {
+    @apply text-xs;
+    line-height: 1.8;
+    margin-top: 12px;
+  }
+  .heading .eyebrow {
+    font-size: 8px;
+    margin-bottom: 14px;
+  }
+  .heading .btn {
+    padding: 11px 18px;
+  }
+
+  .library-toolbar {
+    @apply flex-wrap;
+    gap: 14px;
+  }
+  .toolbar-right {
+    @apply w-full;
+  }
+  .search {
+    @apply w-full;
+  }
+  .library-toolbar > .search {
+    @apply w-full;
+  }
+  .empty {
+    min-height: 330px;
+    padding: 30px 20px;
+  }
+  .empty h2 {
+    font-size: 19px;
+  }
+  .empty p {
+    @apply text-xs;
+  }
+  .selection-bar {
+    @apply flex-wrap justify-center;
+    max-width: calc(100% - 24px);
+
+    gap: 10px;
+    bottom: 12px;
+    white-space: normal;
+  }
+  .selection-bar .text-btn {
+    margin-right: 0;
+  }
+
+  .studio-footer small {
+    @apply text-[10px];
+    margin-left: 12px;
+  }
+  .studio-landing > main {
+    padding: 0 20px;
+  }
+  .landing-how {
+    @apply hidden;
+  }
+
+  .landing-hero h1 {
+    font-size: 42px;
+    letter-spacing: -2.2px;
+  }
+  .landing-hero p {
+    @apply text-xs;
+  }
+  .landing-hero .eyebrow {
+    font-size: 8px;
+  }
+  .studio-feature {
+    grid-template-columns: 1fr;
+    padding: 36px 28px 40px;
+  }
+  .feature-copy h2 {
+    font-size: 31px;
+  }
+
+  .art-sticker {
+    right: 0;
+  }
+  .studio-paper {
+    width: 225px;
+    height: 300px;
+  }
+
+  .landing-steps > h2 {
+    font-size: 25px;
+  }
+
+  .step-grid > div {
+    padding-bottom: 26px;
+    border-bottom: 1px solid var(--line);
+  }
+  .step-grid h3 {
+    margin-top: 18px;
+  }
+  .registration-file-action:has(.upload-welcome) .heading {
+    padding: 26px 20px 0;
+  }
+  .registration-file-action .heading h1 {
+    font-size: 25px;
+  }
+  .upload-welcome h2 {
+    font-size: 17px;
+  }
+}
