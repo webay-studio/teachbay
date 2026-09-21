@@ -1,0 +1,1907 @@
+{
+  "schemaVersion": 1,
+  "purpose": "첨부 PDF의 논리 문항, 읽기 순서, 분할 문항 연결을 검증하기 위한 회귀 테스트 기준",
+  "status": {
+    "sourcePagesVisuallyReviewed": 15,
+    "userImplementationExecuted": false,
+    "userOcrExecuted": false,
+    "shapeFilterThresholdsValidated": false,
+    "nativeAnchorOnlyChecksExecuted": true,
+    "nativeAnchorCounts": {
+      "1111": 22,
+      "2222": 22
+    }
+  },
+  "coordinateConvention": {
+    "page": "1-based",
+    "column": "0=left, 1=right",
+    "bbox": "[x0,y0,x1,y1], 0..1, top-left origin, rendered visible page after PDF rotation",
+    "nativeAnchorBoxes": "문항 번호 텍스트의 실제 PDF bbox. 최종 문항 전체 bbox의 정답이 아님."
+  },
+  "limitations": [
+    "문항 전체 경계 및 인쇄/필기 픽셀 정답 마스크는 포함하지 않음.",
+    "1111과 2222는 같은 문항의 배치 변경 쌍이며 독립된 문제 내용 표본이 아님.",
+    "이 기준을 현재 JSON 내보내기 형식에 연결하는 어댑터와 테스트 실행기는 별도 구현해야 함.",
+    "미리보기 이미지가 아닌 실제 PDF를 재렌더링해 육안 검토함."
+  ],
+  "documents": [
+    {
+      "id": "1111",
+      "fileName": "1111.pdf",
+      "sha256": "ce141dc0ee91b526a41de5cd3a5665b1bc49e327e00aca5e2647ef767f66c99b",
+      "pdfTypeObserved": "native-text-with-drawings-and-some-raster-figures",
+      "pageCount": 3,
+      "expectedLogicalQuestionCount": 22,
+      "expectedPhysicalPartCount": 24,
+      "pageInventory": [
+        {
+          "page": 1,
+          "rotationDegrees": 0,
+          "visibleSizePt": [
+            594.96,
+            841.92
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 1392,
+          "rasterImageCount": 6,
+          "drawingPathCount": 485
+        },
+        {
+          "page": 2,
+          "rotationDegrees": 0,
+          "visibleSizePt": [
+            594.96,
+            841.92
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 1794,
+          "rasterImageCount": 0,
+          "drawingPathCount": 591
+        },
+        {
+          "page": 3,
+          "rotationDegrees": 0,
+          "visibleSizePt": [
+            594.96,
+            841.92
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 1716,
+          "rasterImageCount": 0,
+          "drawingPathCount": 551
+        }
+      ],
+      "questions": [
+        {
+          "id": "mc-1",
+          "section": "multiple-choice",
+          "sourceLabel": "1.",
+          "sourceNumber": 1,
+          "parts": [
+            {
+              "page": 1,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.104061,
+              0.058996,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-2",
+          "section": "multiple-choice",
+          "sourceLabel": "2.",
+          "sourceNumber": 2,
+          "parts": [
+            {
+              "page": 1,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.215413,
+              0.058996,
+              0.228776
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-3",
+          "section": "multiple-choice",
+          "sourceLabel": "3.",
+          "sourceNumber": 3,
+          "parts": [
+            {
+              "page": 1,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.326766,
+              0.058996,
+              0.340128
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-4",
+          "section": "multiple-choice",
+          "sourceLabel": "4.",
+          "sourceNumber": 4,
+          "parts": [
+            {
+              "page": 1,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.437228,
+              0.058996,
+              0.45059
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-5",
+          "section": "multiple-choice",
+          "sourceLabel": "5.",
+          "sourceNumber": 5,
+          "parts": [
+            {
+              "page": 1,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.569069,
+              0.058996,
+              0.582432
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          },
+          "requiredNativeImages": [
+            {
+              "page": 1,
+              "column": 0,
+              "role": "main-figure",
+              "choiceNumber": null,
+              "bbox": [
+                0.176482,
+                0.654753,
+                0.383219,
+                0.797285
+              ]
+            },
+            {
+              "page": 1,
+              "column": 0,
+              "role": "choice-figure",
+              "choiceNumber": 1,
+              "bbox": [
+                0.075635,
+                0.804411,
+                0.110932,
+                0.829354
+              ]
+            },
+            {
+              "page": 1,
+              "column": 0,
+              "role": "choice-figure",
+              "choiceNumber": 2,
+              "bbox": [
+                0.291196,
+                0.804411,
+                0.325232,
+                0.829354
+              ]
+            },
+            {
+              "page": 1,
+              "column": 0,
+              "role": "choice-figure",
+              "choiceNumber": 3,
+              "bbox": [
+                0.075635,
+                0.841826,
+                0.109671,
+                0.866769
+              ]
+            },
+            {
+              "page": 1,
+              "column": 0,
+              "role": "choice-figure",
+              "choiceNumber": 4,
+              "bbox": [
+                0.291196,
+                0.841826,
+                0.326493,
+                0.866769
+              ]
+            },
+            {
+              "page": 1,
+              "column": 0,
+              "role": "choice-figure",
+              "choiceNumber": 5,
+              "bbox": [
+                0.075635,
+                0.87835,
+                0.110932,
+                0.903292
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mc-6",
+          "section": "multiple-choice",
+          "sourceLabel": "6.",
+          "sourceNumber": 6,
+          "parts": [
+            {
+              "page": 1,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.104061,
+              0.538019,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-7",
+          "section": "multiple-choice",
+          "sourceLabel": "7.",
+          "sourceNumber": 7,
+          "parts": [
+            {
+              "page": 1,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.355272,
+              0.538019,
+              0.368635
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-8",
+          "section": "multiple-choice",
+          "sourceLabel": "8.",
+          "sourceNumber": 8,
+          "parts": [
+            {
+              "page": 1,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.594903,
+              0.538019,
+              0.608265
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-9",
+          "section": "multiple-choice",
+          "sourceLabel": "9.",
+          "sourceNumber": 9,
+          "parts": [
+            {
+              "page": 1,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.745452,
+              0.538019,
+              0.758814
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-10",
+          "section": "multiple-choice",
+          "sourceLabel": "10.",
+          "sourceNumber": 10,
+          "parts": [
+            {
+              "page": 2,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.104061,
+              0.067977,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-11",
+          "section": "multiple-choice",
+          "sourceLabel": "11.",
+          "sourceNumber": 11,
+          "parts": [
+            {
+              "page": 2,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.235011,
+              0.067977,
+              0.248374
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-12",
+          "section": "multiple-choice",
+          "sourceLabel": "12.",
+          "sourceNumber": 12,
+          "parts": [
+            {
+              "page": 2,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.406049,
+              0.067977,
+              0.419411
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-13",
+          "section": "multiple-choice",
+          "sourceLabel": "13.",
+          "sourceNumber": 13,
+          "parts": [
+            {
+              "page": 2,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.609156,
+              0.067977,
+              0.622519
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-14",
+          "section": "multiple-choice",
+          "sourceLabel": "14.",
+          "sourceNumber": 14,
+          "parts": [
+            {
+              "page": 2,
+              "column": 0,
+              "role": "start"
+            },
+            {
+              "page": 2,
+              "column": 1,
+              "role": "continuation"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.779303,
+              0.067977,
+              0.792665
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-15",
+          "section": "multiple-choice",
+          "sourceLabel": "15.",
+          "sourceNumber": 15,
+          "parts": [
+            {
+              "page": 2,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.259064,
+              0.547001,
+              0.272426
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-16",
+          "section": "multiple-choice",
+          "sourceLabel": "16.",
+          "sourceNumber": 16,
+          "parts": [
+            {
+              "page": 2,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.521856,
+              0.547001,
+              0.535218
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-17",
+          "section": "multiple-choice",
+          "sourceLabel": "17.",
+          "sourceNumber": 17,
+          "parts": [
+            {
+              "page": 2,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.692893,
+              0.547001,
+              0.706256
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-18",
+          "section": "multiple-choice",
+          "sourceLabel": "18.",
+          "sourceNumber": 18,
+          "parts": [
+            {
+              "page": 2,
+              "column": 1,
+              "role": "number-only"
+            },
+            {
+              "page": 3,
+              "column": 0,
+              "role": "continuation"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.844333,
+              0.547001,
+              0.857695
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-19",
+          "section": "multiple-choice",
+          "sourceLabel": "19.",
+          "sourceNumber": 19,
+          "parts": [
+            {
+              "page": 3,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 3,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.307168,
+              0.067977,
+              0.32053
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-20",
+          "section": "multiple-choice",
+          "sourceLabel": "20.",
+          "sourceNumber": 20,
+          "parts": [
+            {
+              "page": 3,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 3,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.54769,
+              0.067977,
+              0.561052
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-21",
+          "section": "multiple-choice",
+          "sourceLabel": "21.",
+          "sourceNumber": 21,
+          "parts": [
+            {
+              "page": 3,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 3,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.742779,
+              0.067977,
+              0.756142
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-22",
+          "section": "multiple-choice",
+          "sourceLabel": "22.",
+          "sourceNumber": 22,
+          "parts": [
+            {
+              "page": 3,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 3,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.104061,
+              0.547001,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        }
+      ]
+    },
+    {
+      "id": "2222",
+      "fileName": "2222.pdf",
+      "sha256": "a3f9563e85e500e33844c28599e6a842d299fb7f61c6752e2d0cd6749f971d2b",
+      "pdfTypeObserved": "native-text-with-drawings-and-some-raster-figures",
+      "pageCount": 6,
+      "expectedLogicalQuestionCount": 22,
+      "expectedPhysicalPartCount": 22,
+      "pageInventory": [
+        {
+          "page": 1,
+          "rotationDegrees": 0,
+          "visibleSizePt": [
+            594.96,
+            841.92
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 466,
+          "rasterImageCount": 0,
+          "drawingPathCount": 192
+        },
+        {
+          "page": 2,
+          "rotationDegrees": 0,
+          "visibleSizePt": [
+            594.96,
+            841.92
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 818,
+          "rasterImageCount": 6,
+          "drawingPathCount": 280
+        },
+        {
+          "page": 3,
+          "rotationDegrees": 0,
+          "visibleSizePt": [
+            594.96,
+            841.92
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 784,
+          "rasterImageCount": 0,
+          "drawingPathCount": 267
+        },
+        {
+          "page": 4,
+          "rotationDegrees": 0,
+          "visibleSizePt": [
+            594.96,
+            841.92
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 1045,
+          "rasterImageCount": 0,
+          "drawingPathCount": 378
+        },
+        {
+          "page": 5,
+          "rotationDegrees": 0,
+          "visibleSizePt": [
+            594.96,
+            841.92
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 1147,
+          "rasterImageCount": 0,
+          "drawingPathCount": 388
+        },
+        {
+          "page": 6,
+          "rotationDegrees": 0,
+          "visibleSizePt": [
+            594.96,
+            841.92
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 765,
+          "rasterImageCount": 0,
+          "drawingPathCount": 242
+        }
+      ],
+      "questions": [
+        {
+          "id": "mc-1",
+          "section": "multiple-choice",
+          "sourceLabel": "1.",
+          "sourceNumber": 1,
+          "parts": [
+            {
+              "page": 1,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.104061,
+              0.058996,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-2",
+          "section": "multiple-choice",
+          "sourceLabel": "2.",
+          "sourceNumber": 2,
+          "parts": [
+            {
+              "page": 1,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.513838,
+              0.058996,
+              0.527201
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-3",
+          "section": "multiple-choice",
+          "sourceLabel": "3.",
+          "sourceNumber": 3,
+          "parts": [
+            {
+              "page": 1,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.104061,
+              0.538019,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-4",
+          "section": "multiple-choice",
+          "sourceLabel": "4.",
+          "sourceNumber": 4,
+          "parts": [
+            {
+              "page": 1,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 1,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.513838,
+              0.538019,
+              0.527201
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-5",
+          "section": "multiple-choice",
+          "sourceLabel": "5.",
+          "sourceNumber": 5,
+          "parts": [
+            {
+              "page": 2,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.104061,
+              0.058996,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          },
+          "requiredNativeImages": [
+            {
+              "page": 2,
+              "column": 0,
+              "role": "main-figure",
+              "choiceNumber": null,
+              "bbox": [
+                0.176482,
+                0.189745,
+                0.383219,
+                0.332276
+              ]
+            },
+            {
+              "page": 2,
+              "column": 0,
+              "role": "choice-figure",
+              "choiceNumber": 1,
+              "bbox": [
+                0.075635,
+                0.339403,
+                0.110932,
+                0.364346
+              ]
+            },
+            {
+              "page": 2,
+              "column": 0,
+              "role": "choice-figure",
+              "choiceNumber": 2,
+              "bbox": [
+                0.291196,
+                0.339403,
+                0.325232,
+                0.364346
+              ]
+            },
+            {
+              "page": 2,
+              "column": 0,
+              "role": "choice-figure",
+              "choiceNumber": 3,
+              "bbox": [
+                0.075635,
+                0.376817,
+                0.109671,
+                0.40176
+              ]
+            },
+            {
+              "page": 2,
+              "column": 0,
+              "role": "choice-figure",
+              "choiceNumber": 4,
+              "bbox": [
+                0.291196,
+                0.376817,
+                0.326493,
+                0.40176
+              ]
+            },
+            {
+              "page": 2,
+              "column": 0,
+              "role": "choice-figure",
+              "choiceNumber": 5,
+              "bbox": [
+                0.075635,
+                0.414232,
+                0.110932,
+                0.439175
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mc-6",
+          "section": "multiple-choice",
+          "sourceLabel": "6.",
+          "sourceNumber": 6,
+          "parts": [
+            {
+              "page": 2,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.512948,
+              0.058996,
+              0.52631
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-7",
+          "section": "multiple-choice",
+          "sourceLabel": "7.",
+          "sourceNumber": 7,
+          "parts": [
+            {
+              "page": 2,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.104061,
+              0.538019,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-8",
+          "section": "multiple-choice",
+          "sourceLabel": "8.",
+          "sourceNumber": 8,
+          "parts": [
+            {
+              "page": 2,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 2,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.512948,
+              0.538019,
+              0.52631
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-9",
+          "section": "multiple-choice",
+          "sourceLabel": "9.",
+          "sourceNumber": 9,
+          "parts": [
+            {
+              "page": 3,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 3,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.104061,
+              0.058996,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-10",
+          "section": "multiple-choice",
+          "sourceLabel": "10.",
+          "sourceNumber": 10,
+          "parts": [
+            {
+              "page": 3,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 3,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.512948,
+              0.067977,
+              0.52631
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-11",
+          "section": "multiple-choice",
+          "sourceLabel": "11.",
+          "sourceNumber": 11,
+          "parts": [
+            {
+              "page": 3,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 3,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.104061,
+              0.547001,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-12",
+          "section": "multiple-choice",
+          "sourceLabel": "12.",
+          "sourceNumber": 12,
+          "parts": [
+            {
+              "page": 3,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 3,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.513838,
+              0.547001,
+              0.527201
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-13",
+          "section": "multiple-choice",
+          "sourceLabel": "13.",
+          "sourceNumber": 13,
+          "parts": [
+            {
+              "page": 4,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 4,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.104061,
+              0.067977,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-14",
+          "section": "multiple-choice",
+          "sourceLabel": "14.",
+          "sourceNumber": 14,
+          "parts": [
+            {
+              "page": 4,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 4,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.513838,
+              0.067977,
+              0.527201
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-15",
+          "section": "multiple-choice",
+          "sourceLabel": "15.",
+          "sourceNumber": 15,
+          "parts": [
+            {
+              "page": 4,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 4,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.104061,
+              0.547001,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-16",
+          "section": "multiple-choice",
+          "sourceLabel": "16.",
+          "sourceNumber": 16,
+          "parts": [
+            {
+              "page": 4,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 4,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.512948,
+              0.547001,
+              0.52631
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-17",
+          "section": "multiple-choice",
+          "sourceLabel": "17.",
+          "sourceNumber": 17,
+          "parts": [
+            {
+              "page": 5,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 5,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.104061,
+              0.067977,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-18",
+          "section": "multiple-choice",
+          "sourceLabel": "18.",
+          "sourceNumber": 18,
+          "parts": [
+            {
+              "page": 5,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 5,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.513838,
+              0.067977,
+              0.527201
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-19",
+          "section": "multiple-choice",
+          "sourceLabel": "19.",
+          "sourceNumber": 19,
+          "parts": [
+            {
+              "page": 5,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 5,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.104061,
+              0.547001,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-20",
+          "section": "multiple-choice",
+          "sourceLabel": "20.",
+          "sourceNumber": 20,
+          "parts": [
+            {
+              "page": 5,
+              "column": 1,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 5,
+            "column": 1,
+            "bbox": [
+              0.524405,
+              0.512948,
+              0.547001,
+              0.52631
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-21",
+          "section": "multiple-choice",
+          "sourceLabel": "21.",
+          "sourceNumber": 21,
+          "parts": [
+            {
+              "page": 6,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 6,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.104061,
+              0.067977,
+              0.117423
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        },
+        {
+          "id": "mc-22",
+          "section": "multiple-choice",
+          "sourceLabel": "22.",
+          "sourceNumber": 22,
+          "parts": [
+            {
+              "page": 6,
+              "column": 0,
+              "role": "whole"
+            }
+          ],
+          "nativeNumberAnchor": {
+            "page": 6,
+            "column": 0,
+            "bbox": [
+              0.045381,
+              0.512948,
+              0.067977,
+              0.52631
+            ],
+            "fontName": "Unnamed-T3",
+            "fontSizePt": 11.25
+          }
+        }
+      ]
+    },
+    {
+      "id": "sangsan-scan",
+      "fileName": "2024 2-2 중간 미적분 04회 상산고(1).pdf",
+      "sha256": "edda5bff478f81e078ace1baaa56f829ed2a033e975c136c360b500b9910ff39",
+      "pdfTypeObserved": "one-raster-scan-per-page-no-text-no-annotations",
+      "pageCount": 6,
+      "expectedLogicalQuestionCount": 22,
+      "expectedPhysicalPartCount": 22,
+      "pageInventory": [
+        {
+          "page": 1,
+          "rotationDegrees": 90,
+          "visibleSizePt": [
+            728.4,
+            1031.76
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 0,
+          "rasterImageCount": 1,
+          "drawingPathCount": 0
+        },
+        {
+          "page": 2,
+          "rotationDegrees": 270,
+          "visibleSizePt": [
+            728.4,
+            1031.76
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 0,
+          "rasterImageCount": 1,
+          "drawingPathCount": 0
+        },
+        {
+          "page": 3,
+          "rotationDegrees": 90,
+          "visibleSizePt": [
+            728.4,
+            1031.76
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 0,
+          "rasterImageCount": 1,
+          "drawingPathCount": 0
+        },
+        {
+          "page": 4,
+          "rotationDegrees": 270,
+          "visibleSizePt": [
+            728.4,
+            1031.76
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 0,
+          "rasterImageCount": 1,
+          "drawingPathCount": 0
+        },
+        {
+          "page": 5,
+          "rotationDegrees": 90,
+          "visibleSizePt": [
+            728.4,
+            1031.76
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 0,
+          "rasterImageCount": 1,
+          "drawingPathCount": 0
+        },
+        {
+          "page": 6,
+          "rotationDegrees": 270,
+          "visibleSizePt": [
+            728.4,
+            1031.76
+          ],
+          "annotationCount": 0,
+          "extractableTextCharacters": 0,
+          "rasterImageCount": 1,
+          "drawingPathCount": 0
+        }
+      ],
+      "questions": [
+        {
+          "id": "sa-1",
+          "section": "short-answer",
+          "sourceLabel": "1.",
+          "sourceNumber": 1,
+          "parts": [
+            {
+              "page": 1,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-2",
+          "section": "short-answer",
+          "sourceLabel": "2.",
+          "sourceNumber": 2,
+          "parts": [
+            {
+              "page": 1,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-3",
+          "section": "short-answer",
+          "sourceLabel": "3.",
+          "sourceNumber": 3,
+          "parts": [
+            {
+              "page": 1,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-4",
+          "section": "short-answer",
+          "sourceLabel": "4.",
+          "sourceNumber": 4,
+          "parts": [
+            {
+              "page": 1,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-5",
+          "section": "short-answer",
+          "sourceLabel": "5.",
+          "sourceNumber": 5,
+          "parts": [
+            {
+              "page": 2,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-6",
+          "section": "short-answer",
+          "sourceLabel": "6.",
+          "sourceNumber": 6,
+          "parts": [
+            {
+              "page": 2,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-7",
+          "section": "short-answer",
+          "sourceLabel": "7.",
+          "sourceNumber": 7,
+          "parts": [
+            {
+              "page": 2,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-8",
+          "section": "short-answer",
+          "sourceLabel": "8.",
+          "sourceNumber": 8,
+          "parts": [
+            {
+              "page": 2,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-9",
+          "section": "short-answer",
+          "sourceLabel": "9.",
+          "sourceNumber": 9,
+          "parts": [
+            {
+              "page": 3,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-10",
+          "section": "short-answer",
+          "sourceLabel": "10.",
+          "sourceNumber": 10,
+          "parts": [
+            {
+              "page": 3,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-11",
+          "section": "short-answer",
+          "sourceLabel": "11.",
+          "sourceNumber": 11,
+          "parts": [
+            {
+              "page": 3,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-12",
+          "section": "short-answer",
+          "sourceLabel": "12.",
+          "sourceNumber": 12,
+          "parts": [
+            {
+              "page": 3,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-13",
+          "section": "short-answer",
+          "sourceLabel": "13.",
+          "sourceNumber": 13,
+          "parts": [
+            {
+              "page": 4,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-14",
+          "section": "short-answer",
+          "sourceLabel": "14.",
+          "sourceNumber": 14,
+          "parts": [
+            {
+              "page": 4,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-15",
+          "section": "short-answer",
+          "sourceLabel": "15.",
+          "sourceNumber": 15,
+          "parts": [
+            {
+              "page": 4,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-16",
+          "section": "short-answer",
+          "sourceLabel": "16.",
+          "sourceNumber": 16,
+          "parts": [
+            {
+              "page": 4,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-17",
+          "section": "short-answer",
+          "sourceLabel": "17.",
+          "sourceNumber": 17,
+          "parts": [
+            {
+              "page": 5,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "sa-18",
+          "section": "short-answer",
+          "sourceLabel": "18.",
+          "sourceNumber": 18,
+          "parts": [
+            {
+              "page": 5,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "desc-1",
+          "section": "descriptive",
+          "sourceLabel": "[서술형1]",
+          "sourceNumber": 1,
+          "parts": [
+            {
+              "page": 6,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "desc-2",
+          "section": "descriptive",
+          "sourceLabel": "[서술형2]",
+          "sourceNumber": 2,
+          "parts": [
+            {
+              "page": 6,
+              "column": 0,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "desc-3",
+          "section": "descriptive",
+          "sourceLabel": "[서술형3]",
+          "sourceNumber": 3,
+          "parts": [
+            {
+              "page": 6,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        },
+        {
+          "id": "desc-4",
+          "section": "descriptive",
+          "sourceLabel": "[서술형4]",
+          "sourceNumber": 4,
+          "parts": [
+            {
+              "page": 6,
+              "column": 1,
+              "role": "whole"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "regressionCases": [
+    {
+      "id": "native-source-routing",
+      "documentIds": [
+        "1111",
+        "2222"
+      ],
+      "title": "PDF 텍스트 활용",
+      "acceptanceCriteria": "문항 번호는 각 파일에서 1..22를 정확히 한 번씩 확인. 이 테스트는 OCR 또는 최종 문항 경계 정확도 검증이 아님.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "cross-column-14",
+      "documentIds": [
+        "1111"
+      ],
+      "title": "14번의 단 이동",
+      "acceptanceCriteria": "2페이지 왼쪽 본문과 오른쪽 상단 조건·선택지를 mc-14 하나의 parts 2개로 연결. 오른쪽 조각을 별도 문항 또는 공통 지문으로 만들지 않음.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "orphan-number-18",
+      "documentIds": [
+        "1111"
+      ],
+      "title": "번호만 이전 페이지에 남음",
+      "acceptanceCriteria": "2페이지 오른쪽 18.을 number-only 후보로 보존하고 3페이지 왼쪽 상단 본문·선택지와 연결. 본문 연결 없음 규칙으로 조기 폐기하지 않음.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "figure-choices-5",
+      "documentIds": [
+        "1111",
+        "2222"
+      ],
+      "title": "그림 선택지의 결합",
+      "acceptanceCriteria": "5번의 본문 그림 1개와 선택지 그림 5개를 모두 포함. 두 열·세 행(2,2,1)의 선택지 배치를 허용. 가는 선·회색 축이 제거되지 않았는지 확인.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "sparse-whitespace",
+      "documentIds": [
+        "2222"
+      ],
+      "title": "풀이 여백 제외",
+      "acceptanceCriteria": "다음 번호 전까지의 빈 공간을 전부 문항 bbox에 포함하지 않음. 실제 본문·선택지·도형의 외곽으로 자름.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "empty-right-column",
+      "documentIds": [
+        "2222"
+      ],
+      "title": "6페이지 오른쪽 빈 단",
+      "acceptanceCriteria": "6페이지는 왼쪽 21,22번만 존재. 오른쪽 중앙선·푸터·노이즈로 문항을 생성하지 않음.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "figure-after-score",
+      "documentIds": [
+        "sangsan-scan"
+      ],
+      "title": "18번 배점 아래 그림",
+      "acceptanceCriteria": "5페이지 오른쪽 18번의 배점 아래에도 인쇄 도형이 있음. 배점을 문항 끝으로 확정하지 않고 도형을 포함. 학생 필기는 원본 보존 상태에서 별도로 평가.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "print-handwriting-overlap",
+      "documentIds": [
+        "sangsan-scan"
+      ],
+      "title": "본문·조건과 겹친 필기",
+      "acceptanceCriteria": "3페이지 10번과 4페이지 14번의 인쇄 본문·조건·수식은 보존. 겹친 획의 분리 근거가 불충분하면 삭제를 보류.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "section-number-reset",
+      "documentIds": [
+        "sangsan-scan"
+      ],
+      "title": "서술형 번호 재시작",
+      "acceptanceCriteria": "6페이지의 서술형 1..4를 기존 단답형 1..4와 구분. 원문 section+number를 보존하고 출력용 연속 번호는 별도 필드로 관리.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "rotated-scan-coordinates",
+      "documentIds": [
+        "sangsan-scan"
+      ],
+      "title": "90/270도 회전 좌표",
+      "acceptanceCriteria": "페이지 회전은 90,270,90,270,90,270. PDF/렌더/OCR crop/분석 축소/화면 좌표의 왕복 변환이 같은 위치를 가리켜야 함.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "reflow-invariance",
+      "documentIds": [
+        "1111",
+        "2222"
+      ],
+      "title": "같은 22문항의 다른 배치",
+      "acceptanceCriteria": "논리 문항 ID 집합과 필수 내용은 동일. 1111의 mc-14,mc-18은 각각 두 조각이며 2222에서는 각각 한 조각.",
+      "executionStatus": "not-run-on-user-implementation"
+    },
+    {
+      "id": "shape-filter-ablation",
+      "documentIds": [
+        "1111",
+        "2222",
+        "sangsan-scan"
+      ],
+      "title": "2차 필터 on/off 비교",
+      "acceptanceCriteria": "동일 OCR 결과를 고정한 상태와 필요한 국소 OCR 갱신 상태를 구분하여 비교. 인쇄 필수요소 손실, 유령 OCR bbox, 과다 병합·분할·미탐을 따로 기록.",
+      "executionStatus": "not-run-on-user-implementation"
+    }
+  ]
+}

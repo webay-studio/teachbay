@@ -1,0 +1,34 @@
+import {chromium, expect} from '@playwright/test';
+import fs from 'node:fs/promises';
+await fs.mkdir('output/review-ui',{recursive:true});
+const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1000}});
+try {
+ await page.goto('http://localhost:3029/login');
+ await page.getByRole('button',{name:'데모로 시작하기'}).click();
+ await page.waitForURL('**/questions');
+ await page.goto('http://localhost:3029/questions/new');
+ await page.getByRole('button',{name:'PDF · 지문/이어짐',exact:true}).click();
+ await page.locator('.document-review').waitFor();
+ await expect(page.locator('.review-advanced')).not.toHaveAttribute('open','');
+ await expect(page.locator('.piece-editor')).not.toHaveAttribute('open','');
+ const cards=page.locator('.piece-card');const initial=await cards.count();
+ await cards.nth(0).getByRole('checkbox').first().check();
+ await cards.nth(1).getByRole('checkbox').first().check();
+ await page.getByRole('button',{name:'선택 묶기 (2)',exact:true}).click();
+ await expect(cards).toHaveCount(initial-1);
+ await expect(cards.first().locator('.piece-preview-button')).toHaveCount(2);
+ await cards.first().getByRole('checkbox',{name:'영역 확인',exact:true}).check();
+ await expect(cards.first().getByRole('checkbox',{name:'영역 확인',exact:true})).toBeChecked();
+ await cards.last().getByRole('button',{name:/분리 결과에서 제외/}).click();
+ await expect(cards).toHaveCount(initial-2);
+ await page.locator('.document-review').screenshot({path:'output/review-ui/desktop.png'});
+ await page.locator('.piece-editor > summary').click();
+ await expect(page.getByRole('textbox',{name:'분리 항목 이름'})).toBeVisible();
+ await page.locator('.piece-editor > summary').click();
+ await page.setViewportSize({width:390,height:844});
+ const overflow=await page.locator('.modal').evaluate(el=>el.scrollWidth>el.clientWidth+1);
+ if(overflow)throw new Error('Mobile modal overflow');
+ await page.screenshot({path:'output/review-ui/mobile.png',fullPage:true});
+ console.log(JSON.stringify({initial,afterMerge:initial-1,afterExclude:initial-2,mergedFragments:2,detailsCollapsed:true,mobileOverflow:overflow}));
+} finally {await browser.close();}

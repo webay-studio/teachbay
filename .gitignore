@@ -1,0 +1,33 @@
+node_modules
+.next
+*.tsbuildinfo
+
+/public/document-runtime/
+
+# Private document analysis artifacts
+/output/registration-baseline/
+
+/output/registration-v2/
+
+/output/content-bounds/
+
+.next-regression/
+
+# User PDF renders and OCR evidence stay local
+/output/region-regression/
+
+.next-korean/
+/output/korean-regression/
+
+.next-optimized/
+
+.next-registration/
+
+# Local data, credentials and generated reports
+/output/
+.env*
+!.env.example
+.DS_Store
+*.log
+/playwright-report/
+/test-results/

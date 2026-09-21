@@ -1,0 +1,47 @@
+{
+  "name": "teachbay",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start --hostname 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test lib/*.test.ts lib/documents/*.test.ts",
+    "format": "prettier --write app components lib",
+    "format:check": "prettier --check app components lib",
+    "postinstall": "node scripts/prepare-document-assets.mjs",
+    "prepare:documents": "node scripts/prepare-document-assets.mjs",
+    "benchmark:registration": "node --import tsx scripts/benchmark-registration.ts"
+  },
+  "dependencies": {
+    "@rhwp/core": "^0.8.6",
+    "@tesseract.js-data/eng": "^1.0.0",
+    "@tesseract.js-data/kor": "^1.0.0",
+    "lucide-react": "^0.468.0",
+    "next": "^15.3.0",
+    "pdfjs-dist": "^6.3.289",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tesseract.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "@napi-rs/canvas": "^1.0.9",
+    "@playwright/test": "^1.63.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "fake-indexeddb": "^6.2.5",
+    "prettier": "^3.9.8",
+    "tailwindcss": "^4.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  },
+  "overrides": {
+    "postcss": "^8.5.28"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}
