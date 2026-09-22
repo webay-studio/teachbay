@@ -19,6 +19,7 @@
     "@rhwp/core": "^0.8.6",
     "@tesseract.js-data/eng": "^1.0.0",
     "@tesseract.js-data/kor": "^1.0.0",
+    "framer-motion": "^13.4.0",
     "lucide-react": "^0.468.0",
     "next": "^15.3.0",
     "pdfjs-dist": "^6.3.289",

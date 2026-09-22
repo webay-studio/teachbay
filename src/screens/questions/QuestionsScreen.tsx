@@ -7,7 +7,7 @@ import { QuestionSelectionAction } from "./_action/QuestionSelection.action";
 import { QuestionDialogsAction } from "./_action/QuestionDialogs.action";
 export default function QuestionsScreen() {
   return (
-    <Shell>
+    <Shell mainClassName="questions-page p-0">
       <QuestionsStoreProvider>
         <QuestionsHandler>
           <QuestionHeaderArea />

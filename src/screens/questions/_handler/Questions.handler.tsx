@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, type ReactNode } from "react";
 import { useCallback, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { errorText } from "@engine/db";
 import type { Question } from "@engine/types";
 import { useQuestionsState } from "../_state/useQuestionsStore";
@@ -28,6 +28,7 @@ function useQuestionsController() {
     setEdit,
   } = state;
   const router = useRouter();
+  const pathname = usePathname();
   const pending = useRef(false);
   const refresh = useCallback(async () => {
     try {
@@ -39,8 +40,8 @@ function useQuestionsController() {
     }
   }, [setRows, setError, setLoading]);
   useEffect(() => {
-    void refresh();
-  }, [refresh]);
+    if (pathname === "/questions") void refresh();
+  }, [refresh, pathname]);
   const filtered = filterQuestions(rows, query);
   async function run(work: () => Promise<void>) {
     if (pending.current) return;

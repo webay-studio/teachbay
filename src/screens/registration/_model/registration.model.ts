@@ -1,9 +1,27 @@
+import type { ImageAsset } from "@engine/types";
 import type {
   PendingQuestion,
   ImportedDocument,
   ImportProgress,
 } from "@engine/documents/types";
+export type ImportJob = {
+  id: string;
+  name: string;
+  state: "waiting" | "processing" | "ready" | "error" | "cancelled" | "saved";
+  progress?: ImportProgress;
+  documentId?: string;
+  imageId?: string;
+  error?: string;
+  previews: {
+    index: number;
+    asset: ImageAsset;
+  }[];
+};
 export interface RegistrationState {
+  jobs: ImportJob[];
+  setJobs: (
+    value: ImportJob[] | ((previous: ImportJob[]) => ImportJob[]),
+  ) => void;
   rows: PendingQuestion[];
   setRows: (
     value:

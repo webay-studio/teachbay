@@ -18,6 +18,7 @@ function useRegistrationController() {
   const state = useRegistrationState();
   const {
     rows,
+    setJobs,
     setRows,
     setErrors,
     busy,
@@ -39,43 +40,87 @@ function useRegistrationController() {
     [cancel],
   );
   async function ingest(files: File[]) {
-    if (importing.current || busy) return;
+    if (importing.current || busy || !files.length) return;
+    const batch = files.map((file) => ({ file, id: crypto.randomUUID() }));
+    setJobs((prev) => [
+      ...prev,
+      ...batch.map(({ file, id }) => ({
+        id,
+        name: file.name,
+        state: "waiting" as const,
+        previews: [],
+      })),
+    ]);
     importing.current = true;
     setReading(1);
     const controller = new AbortController();
     cancel.current = controller;
     try {
-      for (const file of files) {
+      for (const { file, id } of batch) {
         if (controller.signal.aborted) break;
+        setJobs((prev) =>
+          prev.map((j) => (j.id === id ? { ...j, state: "processing" } : j)),
+        );
+        const report = (
+          progress: import("@engine/documents/types").ImportProgress,
+        ) => {
+          setProgress(progress);
+          setJobs((prev) =>
+            prev.map((j) => (j.id === id ? { ...j, progress } : j)),
+          );
+        };
         try {
           if (isDocument(file)) {
-            const doc = await readDocument(
-              file,
-              setProgress,
-              controller.signal,
-            );
+            const doc = await readDocument(file, report, controller.signal);
+            if (controller.signal.aborted) break;
             setDocuments((prev) => [...prev, doc]);
+            setReviewId((prev) => prev ?? doc.id);
+            setJobs((prev) =>
+              prev.map((j) =>
+                j.id === id
+                  ? { ...j, state: "ready", documentId: doc.id, previews: [] }
+                  : j,
+              ),
+            );
           } else {
-            setProgress({
+            report({
               current: 0,
               total: 1,
               message: `${file.name} · 이미지 확인 중`,
             });
             const asset = await readImage(file);
-            if (!controller.signal.aborted)
-              setRows((prev) => [
-                ...prev,
-                {
-                  id: crypto.randomUUID(),
-                  name: file.name.replace(/\.[^.]+$/, "") || "붙여넣은 문제",
-                  filename: file.name,
-                  memo: "",
-                  asset,
-                },
-              ]);
+            if (controller.signal.aborted) break;
+            const imageId = crypto.randomUUID();
+            setJobs((prev) =>
+              prev.map((j) =>
+                j.id === id
+                  ? {
+                      ...j,
+                      state: "ready",
+                      imageId,
+                      previews: [{ index: 0, asset }],
+                    }
+                  : j,
+              ),
+            );
+            setRows((prev) => [
+              ...prev,
+              {
+                id: imageId,
+                name: file.name.replace(/\.[^.]+$/, "") || "붙여넣은 문제",
+                filename: file.name,
+                memo: "",
+                asset,
+              },
+            ]);
           }
         } catch (e) {
           if (controller.signal.aborted) break;
+          setJobs((prev) =>
+            prev.map((j) =>
+              j.id === id ? { ...j, state: "error", error: errorText(e) } : j,
+            ),
+          );
           setErrors((prev) => [
             ...prev,
             `${file.name}: ${e instanceof Error ? e.message : "파일을 읽지 못했습니다."}`,
@@ -83,6 +128,15 @@ function useRegistrationController() {
         }
       }
     } finally {
+      if (controller.signal.aborted)
+        setJobs((prev) =>
+          prev.map((j) =>
+            batch.some((b) => b.id === j.id) &&
+            (j.state === "waiting" || j.state === "processing")
+              ? { ...j, state: "cancelled", previews: [] }
+              : j,
+          ),
+        );
       importing.current = false;
       setReading(0);
       setProgress(undefined);
@@ -121,6 +175,7 @@ function useRegistrationController() {
   function removeDocument(id: string) {
     if (!confirm("이 파일을 등록 목록에서 제외할까요?")) return;
     setDocuments((prev) => prev.filter((doc) => doc.id !== id));
+    setJobs((prev) => prev.filter((j) => j.documentId !== id));
     if (reviewId === id) setReviewId(undefined);
   }
   function updateReview(
@@ -135,6 +190,11 @@ function useRegistrationController() {
   }
   async function acceptReview(items: PendingQuestion[]) {
     await persist(items);
+    setJobs((prev) =>
+      prev.map((j) =>
+        j.documentId === reviewId ? { ...j, state: "saved", previews: [] } : j,
+      ),
+    );
     const remaining = documentsRef.current.filter((doc) => doc.id !== reviewId);
     setDocuments(remaining);
     setReviewId(remaining[0]?.id);

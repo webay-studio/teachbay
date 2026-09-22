@@ -1,14 +1,13 @@
 "use client";
-import { ImagePlus } from "lucide-react";
-import { Heading } from "@ui/shared";
+import { Plus } from "lucide-react";
 import { DOCUMENT_ACCEPT } from "../_lib/registration.lib";
 import { useRegistrationHandler } from "../_handler/Registration.handler";
 export function FilePickerAction() {
   const { input, busy, reading, ingest, documents, rows } =
     useRegistrationHandler();
+  const empty = !reading && !documents.length && !rows.length;
   return (
     <>
-      {" "}
       <input
         hidden
         ref={input}
@@ -20,31 +19,22 @@ export function FilePickerAction() {
           e.target.value = "";
         }}
       />
-      <div className="registration-file-action">
-        {!documents.length && !rows.length && !reading && (
-          <Heading
-            eyebrow="START YOUR COLLECTION"
-            title="좋은 수업의 재료를 모아요."
-            description="이미지, PDF, 한글 문서를 가져오세요. 필요한 문제를 골라 담을 수 있어요."
-          />
+      <button
+        className={empty ? "registration-drop-target" : "registration-add-file"}
+        disabled={busy || reading > 0}
+        onClick={() => input.current?.click()}
+      >
+        <Plus size={empty ? 36 : 16} strokeWidth={1.5} />
+        {empty ? (
+          <>
+            <strong>파일을 여기에 놓아주세요</strong>
+            <span>또는 클릭해서 파일 선택</span>
+            <small>PDF · HWP · HWPX · JPG · PNG · WebP</small>
+          </>
+        ) : (
+          <span>파일 추가</span>
         )}
-        {!documents.length && !rows.length && !reading && (
-          <div className="upload-welcome" aria-hidden="true">
-            <ImagePlus size={36} />
-            <h2>여기에 파일을 놓아주세요.</h2>
-            <p>또는 아래 버튼으로 기기의 파일을 선택하세요.</p>
-            <span>JPG · PNG · WEBP · PDF · HWP · HWPX</span>
-          </div>
-        )}
-        <button
-          className="btn primary"
-          disabled={busy || reading > 0}
-          onClick={() => input.current?.click()}
-        >
-          <ImagePlus size={18} />
-          파일 선택
-        </button>
-      </div>
+      </button>
     </>
   );
 }

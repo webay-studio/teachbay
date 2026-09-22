@@ -7,12 +7,14 @@ export default function SessionScreen() {
   return (
     <div className="studio-landing">
       <SessionHeaderArea />
-      <main>
-        <SessionHeroArea />
-        <SessionFeatureArea />
-        <SessionStepsArea />
-      </main>
-      <SessionFooterArea />
+      <div className="landing-body">
+        <main>
+          <SessionHeroArea />
+          <SessionFeatureArea />
+          <SessionStepsArea />
+        </main>
+        <SessionFooterArea />
+      </div>
     </div>
   );
 }

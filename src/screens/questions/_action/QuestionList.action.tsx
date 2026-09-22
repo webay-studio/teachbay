@@ -1,6 +1,6 @@
 "use client";
-import { Search, Check } from "lucide-react";
-import { Empty } from "@ui/shared";
+import { Search, Check, Plus } from "lucide-react";
+import Link from "next/link";
 import { QuestionCard } from "../_component/QuestionCard";
 import { useQuestionsHandler } from "../_handler/Questions.handler";
 export function QuestionListAction() {
@@ -12,12 +12,46 @@ export function QuestionListAction() {
       {loading ? (
         <div className="empty">문제를 불러오는 중…</div>
       ) : rows.length === 0 ? (
-        <Empty
-          title="첫 번째 문제부터, 가볍게."
-          description="이미지, PDF, 한글 문서를 올려보세요. 나만의 문제 모음이 시작됩니다."
-          href="/questions/new"
-          label="문제 등록"
-        />
+        <section
+          className="library-start"
+          aria-labelledby="library-start-title"
+        >
+          <div className="library-paper" aria-hidden="true">
+            <div className="library-paper-top">나의 문제 모음</div>
+            <div className="library-paper-rule" />
+            <div className="library-paper-question">
+              <b>01</b>
+              <span />
+            </div>
+            <div className="library-paper-lines">
+              <i />
+              <i />
+              <i />
+            </div>
+            <div className="library-paper-question">
+              <b>02</b>
+              <span />
+            </div>
+            <div className="library-paper-lines">
+              <i />
+              <i />
+            </div>
+            <div className="library-paper-foot">TEACHBAY</div>
+          </div>
+          <div className="library-start-copy">
+            <span className="library-start-label">내 문제 보관함</span>
+            <h2 id="library-start-title">아직 등록한 문제가 없어요.</h2>
+            <p>
+              가지고 있는 시험지에서 문제를 모아보세요.
+              <br />
+              필요한 문제를 골라 새 시험지로 만들 수 있어요.
+            </p>
+            <Link href="/questions/new" scroll={false} className="btn primary">
+              <Plus size={17} /> 첫 문제 등록하기
+            </Link>
+            <small>이미지 · PDF · 한글 파일</small>
+          </div>
+        </section>
       ) : filtered.length === 0 ? (
         <div className="empty">
           <Search size={28} />

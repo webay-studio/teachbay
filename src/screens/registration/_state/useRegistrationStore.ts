@@ -5,6 +5,11 @@ import { createScreenStore } from "@/_state/createScreenStore";
 import type { RegistrationState } from "../_model/registration.model";
 const { Provider, useScreenStore } = createScreenStore<RegistrationState>(
   (set) => ({
+    jobs: [],
+    setJobs: (value) =>
+      set((state) => ({
+        jobs: typeof value === "function" ? value(state.jobs) : value,
+      })),
     rows: [],
     setRows: (value) =>
       set((state) => ({
