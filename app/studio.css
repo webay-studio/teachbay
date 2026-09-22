@@ -1122,6 +1122,7 @@
 /* Paper workspace: texture belongs to the desk, never to printed documents. */
 @media screen {
   .studio-workspace,
+  .studio-landing,
   .registration-route-panel {
     --line: #d9dad5;
     --muted: #6c706d;
@@ -1133,7 +1134,8 @@
     background-image: var(--paper-grid);
     background-size: 24px 24px;
   }
-  .studio-workspace > .studio-header {
+  .studio-workspace > .studio-header,
+  .studio-landing > .studio-header {
     background: transparent;
   }
   .studio-workspace .heading h1 {
@@ -1365,6 +1367,375 @@
     }
     .library-start-copy p {
       font-size: 13px;
+    }
+  }
+}
+
+@media screen {
+  .studio-landing .studio-header {
+    width: 100%;
+  }
+  .login-how {
+    font-size: 13px;
+    color: #686e63;
+  }
+  .studio-landing .login-header-start {
+    margin-left: auto;
+  }
+  .studio-landing .btn {
+    border-radius: 8px;
+    box-shadow: none;
+  }
+  .login-intro {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 64px;
+    padding: 52px 32px 60px;
+    min-height: 540px;
+  }
+  .login-intro-logo {
+    display: block;
+    width: 44px;
+    height: auto;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 700px) {
+    .login-intro-logo {
+      margin-inline: auto;
+    }
+  }
+  .login-label {
+    display: block;
+    font-size: 12px;
+    color: #72796c;
+    margin-bottom: 22px;
+  }
+  .login-intro h1 {
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 550;
+    line-height: 1.45;
+    letter-spacing: -1.5px;
+  }
+  .login-intro-copy > p {
+    margin-top: 22px;
+    font-size: 15px;
+    line-height: 1.9;
+    color: #687061;
+  }
+  .login-intro-copy .btn {
+    margin-top: 30px;
+    gap: 20px;
+    padding: 14px 20px;
+  }
+  .login-intro-copy > small {
+    display: block;
+    margin-top: 14px;
+    font-size: 11px;
+    line-height: 1.8;
+    color: #767d70;
+  }
+  .login-paper-scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 20px;
+  }
+  .login-paper-sheet {
+    width: min(280px, 100%);
+    padding: 26px;
+    background: #fffffd;
+    border: 1px solid #d5d8ce;
+    box-shadow:
+      6px 7px 0 #f5f6f0,
+      7px 8px 0 #d5d8ce,
+      0 14px 30px #30352b0a;
+  }
+  .login-paper-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #777e6f;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #929b85;
+  }
+  .login-paper-sheet h2 {
+    font-size: 21px;
+    font-weight: 550;
+    text-align: center;
+    margin: 22px 0 16px;
+  }
+  .login-paper-fields {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px;
+    font-size: 8px;
+    color: #7a8172;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #d8ddd1;
+  }
+  .login-paper-fields span {
+    width: 30px;
+    border-bottom: 1px solid #d8ddd1;
+    height: 10px;
+  }
+  .login-paper-item {
+    display: flex;
+    gap: 12px;
+    margin-top: 23px;
+  }
+  .login-paper-item b {
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 500;
+  }
+  .login-paper-item > div {
+    flex: 1;
+    padding-top: 4px;
+  }
+  .login-paper-item i {
+    display: block;
+    height: 3px;
+    background: #e1e5da;
+    margin-bottom: 7px;
+  }
+  .login-paper-item i:last-of-type {
+    width: 65%;
+  }
+  .login-answer-space {
+    border: 1px solid #e2e6dc;
+    height: 44px;
+    margin-top: 12px;
+  }
+  .login-paper-bottom {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #d8ddd1;
+    margin-top: 28px;
+    padding-top: 10px;
+    font-size: 8px;
+    color: #828979;
+  }
+  .login-paper-caption {
+    font-size: 11px;
+    color: #767e6d;
+  }
+  .login-steps {
+    padding: 30px 0 48px;
+    border-top: 1px solid #d4d7ce;
+    scroll-margin-top: 20px;
+  }
+  .login-steps > h2 {
+    font-size: 17px;
+    font-weight: 550;
+  }
+  .login-step-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px;
+    margin-top: 26px;
+  }
+  .login-step-icon {
+    display: inline-flex;
+    vertical-align: middle;
+    color: #6b7461;
+    margin-right: 12px;
+  }
+  .login-step-grid small {
+    color: var(--accent);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .login-step-grid h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 14px 0 8px;
+  }
+  .login-step-grid p {
+    color: #727a68;
+    font-size: 12px;
+    line-height: 1.8;
+    max-width: 290px;
+  }
+  @media (max-width: 700px) {
+    .login-intro {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 32px 0;
+    }
+    .login-intro-copy {
+      text-align: center;
+    }
+    .login-intro h1 {
+      font-size: 30px;
+    }
+    .login-paper-scene {
+      padding: 16px 0;
+    }
+    .login-paper-sheet {
+      width: 230px;
+      padding: 20px;
+    }
+    .login-step-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .login-step-grid > div {
+      border-bottom: 1px solid #dde0d6;
+      padding-bottom: 20px;
+    }
+    .login-step-grid p {
+      max-width: none;
+    }
+    .studio-landing .studio-header {
+      flex-wrap: nowrap;
+      gap: 16px;
+    }
+    .studio-landing .login-header-start {
+      padding: 9px 12px;
+      font-size: 11px;
+    }
+  }
+}
+
+/* Decorative drafting layer stays behind the content and never captures input. */
+@media screen {
+  .studio-landing {
+    position: relative;
+    isolation: isolate;
+  }
+  .studio-landing > .studio-header {
+    background: transparent;
+  }
+  .studio-landing > .landing-body {
+    position: relative;
+    z-index: 1;
+  }
+  .login-backdrop {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: linear-gradient(90deg, transparent 23%, #000 58%);
+  }
+  .login-backdrop svg {
+    position: absolute;
+    width: min(76vw, 1000px);
+    height: auto;
+    right: -3%;
+    top: 0;
+    color: #727b6a;
+    stroke: currentColor;
+    stroke-width: 0.75;
+    opacity: 0.25;
+  }
+  .login-backdrop text {
+    fill: currentColor;
+    stroke: none;
+    font-size: 9px;
+    letter-spacing: 2px;
+    font-family: var(--font-pretendard), sans-serif;
+  }
+  .draft-page {
+    stroke-width: 1;
+  }
+  .draft-guides {
+    opacity: 0.7;
+  }
+  .draft-orbit {
+    transform-origin: 400px 400px;
+    animation: drafting-orbit 100s linear infinite;
+  }
+  .studio-landing .login-intro {
+    display: flex;
+    min-height: clamp(470px, 65dvh, 650px);
+    padding: 64px 32px;
+  }
+  .login-intro-copy {
+    max-width: 500px;
+  }
+  .studio-landing .login-steps {
+    background: #eeefebcc;
+  }
+  @keyframes drafting-orbit {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (max-width: 700px) {
+    .login-backdrop {
+      mask-image: linear-gradient(180deg, #000, transparent 80%);
+    }
+    .login-backdrop svg {
+      width: 780px;
+      max-width: none;
+      right: -460px;
+      top: 30px;
+      opacity: 0.12;
+    }
+    .studio-landing .login-intro {
+      padding: 48px 0;
+      min-height: 470px;
+      justify-content: center;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .draft-orbit {
+      animation: none;
+    }
+  }
+}
+
+@media screen {
+  .studio-landing .login-steps {
+    background: transparent;
+    padding: 28px 0 36px;
+    border-top-color: #d4d7ce;
+  }
+  .login-steps .login-step-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 28px;
+  }
+  .login-step-grid > li {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .login-step-number {
+    color: #8a9182;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .login-step-grid > li h3 {
+    margin: 0 0 7px;
+    font-size: 13px;
+    font-weight: 550;
+  }
+  .login-step-grid > li p {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .login-backdrop {
+    bottom: auto;
+    height: min(760px, calc(65dvh + 96px));
+    mask-image:
+      linear-gradient(90deg, transparent 23%, #000 58%),
+      linear-gradient(#000 65%, transparent 100%);
+    mask-composite: intersect;
+  }
+  @media (max-width: 700px) {
+    .login-backdrop {
+      height: 550px;
+      mask-image: linear-gradient(#000, transparent);
+      mask-composite: add;
+    }
+    .login-steps .login-step-grid {
+      gap: 22px;
     }
   }
 }
