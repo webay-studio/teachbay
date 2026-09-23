@@ -1,5 +1,9 @@
 # Worklog (newest first)
 
+## 2026-09-23 whiteboard/experiment release
+`7f52549`:25 files; English KB/AGENTS, unit navigation, shared board, active preview/save scope, opt-in text/KaTeX experiment + smoke/unit checks. Pushed origin/main; remote accepted0e362f4..7f52549. This docs follow-up records release/handoff.
+Checks: fetch confirmed no divergence; staged diff check passed. No code changes after prior85 core/6 UI/type/build/native+scan Chrome verification; checks not repeated. KB-013 preview-only/math-recognition limits remain. Private fixtures/screenshots and generated build files excluded.
+
 ## 2026-09-23 OCR/text + KaTeX experiment
 Request: try editable text/math + retained images. Added lazy `components/documents/editable-preview.tsx`, `docs/{editable-preview,extract-editable-preview}.ts`, KaTeX0.18.7. Opt-in split uses native located text or one cancellable crop OCR pass; deduplicated/mask-filtered boxes, uncertain content stays raster. Edit/delete/undo/restore; manual formula region + safe bounded KaTeX; fit long text/formulas inside boxes. Session cache keyed by geometry/masks; explicit no-save notice; engine/save model unchanged. Board excludes editor controls from pan/Space interception.
 Checks:85 core (4 new extraction/symbol cases),6 UI,type,final isolated build/diff pass; next-env restored. Chrome native1111 + synthetic raster PDF: split/edit/delete/undo, fraction/root/error display, image restore/cache/manual region, source geometry unchanged, original-only save; no pageerror. Final native/scan screens inspected. Initial scan run interrupted during dev reload; final stable run passed. Real complex math/HWP not assessed; no automatic image-to-LaTeX or durable edited save (KB-013). No commit/push.

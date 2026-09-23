@@ -1,6 +1,6 @@
 # Handoff 2026-09-23
 
-- Baseline main/origin/main=`0e362f4` (handoff), implementation=`5543512`; pushes confirmed. Local changes: English KB compaction + review declutter + pan/zoom board + editable preview experiment; no new commit/push. Verify live git status.
+- Implementation=`7f52549`, pushed origin/main (2026-09-23): review declutter/whiteboard/active preview/text-math experiment + English KB. This docs follow-up records the confirmed push; verify live git status for current HEAD.
 - Latest preference: agent KB in terse English, minimum tokens, no human-facing narrative. Rules/index: `../AGENTS.md`, `README.md`.
 - Current UX: file-first intake; soft-route modal/hard-route redirect; real analysis stages; direct region editor; header save/X; source/large active-piece preview side-by-side on pan/zoom board; expanded unit list (bundles once), opt-in checkboxes, member editing tabs; matched active labels/colors and explicit preview bundle-save/exclusion scope. Details/superseded choices: `03-ui-design.md`.
 - Import auto-bundles existing passage links once. Range/ungroup/undo remain; one saved unit, all original fragments/child records retained. Image number/score masking != title editing. Source/OCR invariants: `02-pdf-engine.md`.
