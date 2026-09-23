@@ -1,108 +1,23 @@
-# UI 결정과 디자인 변경
+# UI (2026-09-23)
 
-## 최신 · 2026-09-23
-- UI/UX 재정리: 등록 모달 desktop inset8px/mobile 전체. 원본/오른쪽≈52:48, desktop 원본 한 쪽 fit(zoom 기준), mobile 너비 fit. 이전 큰 원본 비중 대체.
-- 최신 변경(2026-09-23): 파일 추가/제외 버튼 삭제; X·확인·저장 헤더 이동. preview 항상 표시, 오른쪽 폭 전체/남는 높이 사용. 세부 옵션 및 이름·연결·정밀 영역/합치기·분할/재분석·trace UI 삭제(직전 닫힌 옵션·하단 저장 결정 대체). 번호 선택·지문 범위·마우스 editor 유지.
-- 번호 목록(2026-09-23): 내부 높이 제한/스크롤 제거, 전체 펼침. 긴 내용은 오른쪽 패널(모바일 모달 본문) scroll. 이전 제한 높이 목록 대체.
-- 저장 문구 `저장할 문제를 확인했어요`; source fit 버튼 `원본 한 쪽에 맞추기`.
-- 묶음 표시(2026-09-23): 소속 문제 선택 시에도 범위·개수 안내와 전체 preview(지문/문제별 label). 번호 chip 연결 아이콘, 묶음 수정 이동; 보관함 이미지 위 지문 묶음·범위 badge. 단일 문제만 preview하던 동작 대체.
-- 초기 묶음(2026-09-23): 인식된 지문·문제 연결은 import 시 자동 묶음. 기존 수동 묶기 기본값 대체; 범위 변경/해제 유지, 해제 후 재자동화 없음.
-- 지문 inspector: 시작/끝 문제 select, 한 문제로 묶기/범위 변경/해제. 지문 chip은 범위, 소속 문제는 같은 색. 묶음 preview 지문→문제, 저장 버튼 실제 단위 수. 보관함 1카드·지문+N문제 표시.
-- 페이지 확인 사항 UI 제거. 이미지 속 번호·배점 자동 제거(인식 확실한 독립 표기); 미리보기/저장 공통 mask. 자동 제거 유지(toggle 삭제), 마우스 지우기/undo. 원본 파일·페이지 보존. 제목 문자열은 유지(사용자 명확화).
-- 검토: 원본 editor+오른쪽 지문/문제 번호 2열; 이전 3열 결정 대체. 빈 곳 드래그 추가, 직접 이동/8방향 resize, undo/Escape/키보드/zoom. preview 접기 없음. 모바일 세로.
-- 분석은 기존 원본/진행 배치 유지; 원본 스캔 없음. OCR 실제 단계+이유 안내.
+- Paper/gray grid/thin lines/existing accent; restrained titles/banners. Screen-only decoration; white source images. Pretendard variable100..900, local WOFF2 v1.3.9+OFL in `app/fonts/`, swap+preload.
+- Workspace: transparent header; symbol then library/exam links; profile right; active underline. Single row mobile. Footer symbol+slogan/browser-storage note; no side padding.
+- Empty library: paper illustration + whole-area accessible picker/drop target, drag highlight. Hide toolbar/top registration only for truly empty library, not zero search results. Cancel picker leaves page unchanged. Memory intake consumed once; back/forward must not reimport.
+- Registration: native dialog+Framer/reduced-motion; desktop inset8px, mobile fullscreen; shared board +280px sidebar. Board pairs600px source/640px preview, fits source/pair initially; mobile focuses one paper at readable width. Header contains filename/ack/save/X; no add-file/remove-file controls.
+- Sidebar: one chip per saved bundle, separate ungrouped questions/passages; no duplicate member chips/link icons/green borders. Checkboxes+bulk actions only in selection mode, one per unit. Neutral default/active-only accent; excluded items labeled. List stays expanded (no internal scroll); sidebar/body scroll. Large always-open preview on board, not sidebar. No advanced options, page notices, name/kind/link sliders, merge/split/reanalysis/trace UI.
+- Board: background/hand/Space/middle drag; wheel pan,Ctrl/Meta-wheel anchored zoom25..250%; source/preview focus and fit controls. Shared transform/grid; no internal preview scroll. Source gestures retain normalized geometry. Edit tools exit hand mode.
+- Experiment: opt-in text mode on active preview; split button, positioned text editing/deletion, manual math region + LaTeX/KaTeX, undo/original restore. Uncertain content stays raster; session cache invalidates on source rect/mask changes. Explicit preview-only/no-save note. See KB-013.
+- Selection: preview always names active question/passage; source caption, preview title and member tab share blue accent. Preview scope names saved bundle range; excluded units say excluded in preview/sidebar. No extra controls.
+- Mouse editor: draw/add, move,8-handle resize, undo/Escape/delete/arrows/zoom; erase+undo. Auto number/score cleanup remains; toggle removed. This changes image marks, not title strings.
+- Passage groups: auto on fresh import; start/end range editor, ungroup/undo. Range chip opens group; member tabs/source clicks preview only the active piece (all its fragments); group membership/save remain intact. Quiet count line; range editor collapsed by default. Delete text names the active region. Library badge shows group/range; save count uses units.
+- Analysis: actual source/current-total pages/page states; central paper motion and progress segments. No original scan overlay/spinner/skeleton. Explain actual operation + retry reason; no timer-rotated messages/OCR counts. Batch states/cancel/completed-file review retained. Per-page question crops still KB-001.
+- Login: logo+copy+entry+3 plain steps, no header/footer. SVG paper/grid/circles; mouse spring ~12/9px,100s arc rotation; fade bottom, pointer-events none/aria-hidden, reduced-motion/coarse-pointer support. Final mobile check KB-002.
+- Files: `app/studio.css`, `components/documents/`, `src/screens/{questions,registration,session}/`; `src/_state/RegistrationIntake.tsx`.
 
-## 최종 디자인 방향
+Superseded on2026-09-23:3-column review ->2; oversized source ->balanced; hidden/compact preview ->large always-open; footer save ->header; folded advanced options ->removed; constrained number-list scroll ->expanded; manual-only grouping ->auto import. Original scan overlay was added/intensified then removed. Hard-route full-page fallback ->redirect.
 
-사용자는 크고 과장된 제목·배너보다 단순하고 다음 행동이 명확한 작업 화면을 선호한다. 참고 이미지는 회색 바탕, 미세 격자, 얇은 선, 도면 눈금이 있는 인터페이스였다. 참고 이미지 자체를 복사해 서비스 자산으로 쓰지 않고 CSS·SVG로 분위기를 구현했다.
+2026-09-23 supersession: duplicate passage+member chip grids/always-on checks/chain icons/green group notice -> unit navigation, opt-in selection, quiet member tabs.
 
-- 기존 키컬러 유지. 주요 버튼·선택 상태에 집중.
-- 종이 같은 옅은 중립 배경, 미세 격자, 얇은 테두리, 절제된 그림자.
-- 문제 원본 이미지는 흰 바탕으로 또렷하게 유지.
-- 화면 테마는 screen 범위로 제한해 인쇄물에 격자가 나오지 않게 한다.
-- Pretendard 가변 폰트 사용. 굵기 100~900, `next/font/local`, `display: swap`, `preload: true`.
-- 공식 Pretendard v1.3.9 WOFF2와 SIL OFL 라이선스를 `app/fonts/`에 보관.
-- 헤더는 고정된 레이아웃 영역, 본문만 스크롤. 얇은 스크롤바 유지.
+2026-09-23 supersession: balanced source/sidebar with bottom preview -> shared pan/zoom board, source-left/preview-right, narrow unit sidebar.
 
-## 작업 화면 헤더·푸터
-
-- 헤더 브랜드 글자를 제거하고 심볼만 표시.
-- 메뉴는 중앙이 아닌 심볼 바로 오른쪽. 프로필은 오른쪽 끝.
-- 모바일에서도 로고·메뉴·프로필을 같은 줄에 배치.
-- 현재 메뉴 표시: 파란 점 대신 진한 글씨와 얇은 키컬러 밑줄.
-- 헤더 배경은 투명.
-- 푸터는 심볼 + ‘좋은 수업을 위한 작은 여유.’ 슬로건 유지.
-- 브라우저 저장 안내 유지.
-- 푸터 좌우 패딩은 데스크톱·모바일 모두 제거.
-
-## 내 문제 `/questions`
-
-제목 ‘좋은 문제, 차곡차곡.’은 유지하지만 크기·굵기를 줄였다. 사용자 피드백: 제목의 자기주장이 강하고 가운데가 무엇인지 모호했음.
-
-빈 상태는 넓은 추상적 안내 카드에서 다음 구성으로 변경했다.
-
-- 왼쪽: 작은 시험지 모양 CSS 그림.
-- 오른쪽: ‘내 문제 보관함’, ‘아직 등록한 문제가 없어요.’
-- 설명: 자료에서 문제를 모아 필요한 문제로 새 시험지를 만든다는 안내.
-- 주요 버튼: ‘첫 문제 등록하기’.
-- 2026-09-23 변경: 위의 모달 선진입 버튼을 ‘파일 선택하기’ 표시와 빈 영역 전체 파일 선택 동작으로 대체했다. 빈 보관함에서 클릭·키보드로 파일 선택 또는 드래그앤드롭 → 파일이 있을 때 등록 모달 → 자동 처리 순서다. 드래그 중 배경과 경계 색상을 강조한다. 파일 선택을 취소하면 모달은 열리지 않는다.
-- 지원 형식: 이미지 · PDF · 한글 파일.
-
-등록 문제가 0개일 때:
-
-- 오른쪽 위 등록 버튼 숨김.
-- 검색·정렬·문제 개수 툴바 숨김.
-- 중앙 안내 높이를 `clamp(440px, 58dvh, 600px)`로 확대.
-
-문제가 있으면 상단 등록 및 툴바가 표시된다. 검색 결과만 0개인 상태와 전체 보관함이 빈 상태를 구분한다. 현재 숨김은 `.questions-page:has(.library-start)` CSS 조건이다.
-
-## 문제 등록
-
-- 등록 화면은 `app/@modal/(.)questions/new` 인터셉트 라우트로 모달 표시.
-- 2026-09-23 변경: 직접 접속·새로고침은 `/questions` redirect. 이전 전체 페이지 표시 결정 대체; soft navigation은 인터셉트 모달.
-- Framer Motion 진입/닫기 애니메이션 및 reduced-motion 대응.
-- 여러 파일 작업 목록, 대기/진행/완료/오류 상태, 취소, 완료 파일 검토 흐름을 추가했다.
-- 빈 보관함에서 선택한 File 객체는 루트 `RegistrationIntakeProvider`의 메모리로 전달해 등록 핸들러가 한 번만 소비한다. 브라우저 뒤로/앞으로 이동으로 같은 파일을 재처리하지 않는다. 영구 저장이나 추출 알고리즘은 변경하지 않는다.
-- 원본 페이지·영역 표시와 문항 크롭을 중심으로 검토.
-- 2026-09-23 후속 변경: 분석 중 가짜 스켈레톤을 실제 원본 페이지, 현재 분석 쪽수, 페이지별 완료/대기 상태로 대체했다. 완료 후에도 원본(왼쪽) / 문항 카드(가운데) / 선택 문항 설정·저장(오른쪽)의 같은 3열 구조를 유지한다. 기존 수정·합치기·연결·원본 확인 기능은 유지하고 도구 위치만 정리했다. 데스크톱은 모달 남은 높이와 패널별 스크롤을 사용하며 모바일은 세로로 배치한다.
-- 같은 날 모션 후속 변경: 사용자는 회전 로딩 아이콘이 어색하다며 더 인터랙티브한 표현을 원했다. 등록 화면 스핀을 원본 위의 느린 스캔 선, 작은 종이 묶음의 상하 움직임, 실제 완료 쪽수에 맞춰 채워지는 분할 진행선, 작은 막대의 움직임으로 대체했다. 페이지 선택 시 해당 원본을 표시하고 완료 페이지에는 스캔 선을 표시하지 않는다. reduced-motion에서는 반복 애니메이션과 이동 효과를 끈다.
-- 스캔 선 후속 조정: 왼쪽 시험지에서 아래로 움직이는 선을 더 명확히 요청했다. 원본에는 2px 키컬러 선과 옅은 빛 자국을 적용하고, 3.6초 동안 위→아래로 일정하게 이동하도록 강화했다. 중앙 종이 아이콘의 기존 모션은 유지한다.
-- 2026-09-23 최종 변경: 사용자가 왼쪽 시험지 스캔 제거를 요청해 위의 원본 스캔 선·빛 자국·전용 애니메이션을 제거했다. 왼쪽은 정적인 원본 이미지이며 중앙 종이 모션과 진행 안내는 유지한다. 앞선 원본 스캔 결정은 이 요청으로 대체됐다.
-- 같은 날 진행 문구 후속 변경: 사용자는 ‘OCR(숫자)’보다 ‘무엇을 하고 있어요’ 형태를 선호했다. 엔진 진행 메시지는 유지하고 화면에서 ‘원본을 불러오고 있어요 / 글자를 읽고 있어요 / 문제의 위치를 찾고 있어요 / 문제와 지문을 정리하고 있어요’로 바꾼다. OCR 패스 번호·백분율·렌더링·관측 용어는 노출하지 않고 실제 쪽수는 별도 진행 UI로 유지한다.
-- 같은 날 추가 명확화: 위의 포괄적인 ‘글자를 읽고 있어요’만으로는 오래 걸리는 이유가 드러나지 않는다는 피드백. PDF 엔진의 실제 작업 종류를 stage로 전달해 전체 읽기 / 짧은 글자 재확인 / 단별 읽기 / 번호 재확인 / 번호 확대 / 페이지 번호 확인을 구분하고, 각 단계 아래에 재확인의 이유를 한 문장으로 보여준다. 시간에 맞춰 문구를 임의 순환시키지 않으며 OCR 호출 횟수 자체로 작업 목적을 추측하지 않는다.
-- 사용자는 한 PDF에서도 완료된 페이지를 먼저 보여주기를 명시적으로 요청했다. 해당 구현의 상태 변동은 구현 로그 참고.
-
-## 로그인 `/login` 최종 상태
-
-변경 과정:
-
-1. 큰 제목·파란 그라데이션 홍보 배너를 제거하고 종이 테마로 전환.
-2. 독립된 시험지 카드가 어색하다는 피드백으로 배경 도면으로 변경.
-3. 아래 단계 안내가 별도 배너처럼 보인다는 피드백으로 제목·아이콘·배경색 제거.
-4. 로그인 헤더 제거.
-5. 로그인 푸터 제거, 심볼을 본문 제목 위에 배치.
-
-최종 구성:
-
-- 본문 로고 심볼, ‘나의 수업 준비 공간’.
-- ‘좋은 문제를 모아, 나만의 수업으로.’ 제목.
-- ‘내 문제를 모아, 바로 시험지로.’ 설명 및 시작 버튼.
-- 회원가입 없이 시작하며 이 브라우저에 저장된다는 안내.
-- 아래 01 문제 등록 / 02 문제 선택 / 03 시험지 출력의 짧은 설명 줄.
-- 전체 뒤에 SVG 도면 배경: 원형 눈금·문항 윤곽·연결선.
-- 마우스 위치에 따라 최대 약 ±12px/±9px로 이동하는 spring 효과.
-- 바깥 원호는 100초 주기로 회전.
-- pointer-events none, aria-hidden. reduced-motion에서 움직임 중지, 거친 포인터에서 마우스 추적 생략.
-- 배경은 아래로 갈수록 흐려져 단계 안내와 겹침을 줄인다.
-
-주요 코드:
-
-- `app/studio.css`: 화면 디자인, 반응형, 배경 및 애니메이션.
-- `components/shared.tsx`: 작업실 헤더·푸터, 브랜드.
-- `src/screens/questions/_action/QuestionList.action.tsx`: 빈 보관함 UI.
-- `src/screens/session/SessionScreen.tsx`: 로그인 화면 구성.
-- `src/screens/session/_area/SessionHero.area.tsx`: 로고·본문·시작 버튼.
-- `src/screens/session/_area/SessionSteps.area.tsx`: 3단계 안내.
-- `src/screens/session/_action/SessionBackdrop.action.tsx`: 인터랙티브 SVG 배경.
-
-현재 사용되지 않는 과거 SessionHeader/SessionFooter/SessionFeature 컴포넌트와 일부 이전 CSS가 남아 있다. 이번 디자인 작업에서 대규모 정리는 하지 않았다.
+2026-09-23 supersession: whole-bundle review preview -> active-piece-only; grouping/navigation/save unchanged.

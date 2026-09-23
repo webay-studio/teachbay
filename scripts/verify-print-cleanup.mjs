@@ -36,6 +36,7 @@ export async function verifyPrintCleanup(page, base) {
   const active = page.locator(".region-overlay.active");
   const id = await active.getAttribute("data-piece-id");
   const chip = page.locator(`.piece-chip[data-piece-id="${id}"]`);
+  await page.getByRole("button", { name: "선택 변경", exact: true }).click();
   const saveLabel = await chip
     .locator("input")
     .first()

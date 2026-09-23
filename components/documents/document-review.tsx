@@ -1,4 +1,6 @@
 "use client";
+import dynamic from "next/dynamic";
+import type { EditableDraft } from "../../lib/documents/editable-preview";
 import { reviewErrors } from "../../lib/documents/review";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -8,11 +10,8 @@ import {
   Undo2,
   ArrowRight,
   MousePointer2,
-  ZoomIn,
-  ZoomOut,
   Eraser,
   Trash2,
-  Link2,
 } from "lucide-react";
 import { useBlobUrl } from "../shared";
 import {
@@ -20,6 +19,7 @@ import {
   intersectRect,
 } from "../../lib/documents/print-cleanup";
 import { RegistrationHeaderActions } from "./registration-header";
+import { ReviewPieceList } from "./review-piece-list";
 import { PassageGroupEditor } from "./passage-group-editor";
 import {
   bundleMembers,
@@ -29,6 +29,7 @@ import {
   toggleBundleSelection,
 } from "../../lib/documents/passage-bundles";
 import { RegionCanvas } from "./region-canvas";
+import { ReviewBoard, REVIEW_PAPER_WIDTH } from "./review-board";
 import type {
   DocumentPage,
   ImportedDocument,
@@ -38,6 +39,9 @@ import type {
 } from "../../lib/documents/types";
 import { prepareRegistration } from "../../lib/documents/prepare-registration";
 import { selectedPiecesForRegistration } from "../../lib/documents/review";
+const EditablePreview = dynamic(() => import("./editable-preview"), {
+  ssr: false,
+});
 function PieceThumb({
   page,
   piece,
@@ -123,7 +127,9 @@ export function DocumentReview({
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [progress, setProgress] = useState("");
-  const [zoom, setZoom] = useState(1);
+  const [previewMode, setPreviewMode] = useState<"image" | "text">("image");
+  const editableCache = useRef(new Map<string, EditableDraft>());
+  const [hand, setHand] = useState(false);
   const [newKind, setNewKind] = useState<"question" | "passage">("question");
   const draftChange = useRef(onDraftChange);
   draftChange.current = onDraftChange;
@@ -140,11 +146,18 @@ export function DocumentReview({
   const page = initial.pages[pageIndex];
   const active = pieces.find((p) => p.id === activeId) ?? pieces[0];
   const activeBundle = active ? bundleOwner(pieces, active.id) : undefined;
-  const previewPieces = activeBundle
+  const bundlePieces = activeBundle
     ? [activeBundle, ...bundleMembers(pieces, activeBundle)]
-    : active
-      ? [active]
-      : [];
+    : [];
+  const previewPieces = active ? [active] : [];
+  const activeIncluded = includedPieces.some((p) => p.id === active?.id);
+  const previewSaveScope = activeBundle
+    ? activeIncluded
+      ? `공통 지문 + ${bundleRange(pieces, activeBundle)}번 묶음으로 저장`
+      : `${bundleRange(pieces, activeBundle)}번 묶음 · 저장 제외`
+    : activeIncluded
+      ? ""
+      : "저장 제외";
   function change(next: Piece[]) {
     setHistory((h) => [
       ...h.slice(-29),
@@ -165,10 +178,22 @@ export function DocumentReview({
     ]);
     setAck(false);
   }
+  function updateBundle(next: Piece[], passageId: string) {
+    change(next);
+    setError("");
+    const passage = next.find((p) => p.id === passageId);
+    if (!passage) return;
+    focus(passage);
+    if (passage.bundleQuestionIds?.length)
+      setIncluded((ids) => [
+        ...new Set([...ids, passage.id, ...passage.bundleQuestionIds!]),
+      ]);
+  }
   function modify(next: Piece) {
     change(pieces.map((p) => (p.id === next.id ? next : p)));
   }
   function focus(p: Piece, index = 0) {
+    setHand(false);
     setActiveId(p.id);
     setFragmentIndex(index);
     setMode("select");
@@ -366,18 +391,22 @@ export function DocumentReview({
             <div className="region-editor-toolbar" aria-label="영역 편집 도구">
               <button
                 className="btn"
-                aria-pressed={mode === "select"}
+                aria-pressed={!hand && mode === "select"}
                 disabled={busy}
-                onClick={() => setMode("select")}
+                onClick={() => {
+                  setHand(false);
+                  setMode("select");
+                }}
               >
                 <MousePointer2 size={14} />
                 선택·이동
               </button>
               <button
                 className="btn"
-                aria-pressed={mode === "new" && newKind === "question"}
+                aria-pressed={!hand && mode === "new" && newKind === "question"}
                 disabled={busy}
                 onClick={() => {
+                  setHand(false);
                   setNewKind("question");
                   setMode("new");
                 }}
@@ -387,9 +416,10 @@ export function DocumentReview({
               </button>
               <button
                 className="btn"
-                aria-pressed={mode === "new" && newKind === "passage"}
+                aria-pressed={!hand && mode === "new" && newKind === "passage"}
                 disabled={busy}
                 onClick={() => {
+                  setHand(false);
                   setNewKind("passage");
                   setMode("new");
                 }}
@@ -399,7 +429,7 @@ export function DocumentReview({
               </button>
               <button
                 className="btn"
-                aria-pressed={mode === "erase"}
+                aria-pressed={!hand && mode === "erase"}
                 disabled={busy || !active}
                 onClick={() => {
                   if (active) {
@@ -419,56 +449,121 @@ export function DocumentReview({
               >
                 <Undo2 size={16} />
               </button>
-              <span className="region-editor-zoom">
-                <button
-                  className="icon"
-                  aria-label="원본 축소"
-                  disabled={zoom <= 0.5}
-                  onClick={() => setZoom(Math.max(0.5, zoom - 0.25))}
-                >
-                  <ZoomOut size={16} />
-                </button>
-                <button
-                  className="text-btn"
-                  aria-label="원본 한 쪽에 맞추기"
-                  onClick={() => setZoom(1)}
-                >
-                  {zoom === 1 ? "한 쪽" : `${Math.round(zoom * 100)}%`}
-                </button>
-                <button
-                  className="icon"
-                  aria-label="원본 확대"
-                  disabled={zoom >= 2}
-                  onClick={() => setZoom(Math.min(2, zoom + 0.25))}
-                >
-                  <ZoomIn size={16} />
-                </button>
-              </span>
             </div>
-            <RegionCanvas
-              page={page}
-              pieces={pieces}
-              activeId={active?.id}
-              fragmentIndex={fragmentIndex}
-              mode={mode}
-              zoom={zoom}
-              busy={busy}
-              label={label}
-              onSelect={focus}
-              onChange={updateRegion}
-              onDraw={commit}
-              onCancel={() => setMode("select")}
-              onDelete={() => {
-                if (active) removePiece(active);
-              }}
-              onUndo={undo}
+            <ReviewBoard
+              aspect={page.asset.width / page.asset.height}
+              hand={hand}
+              onHandChange={setHand}
+              source={
+                <RegionCanvas
+                  page={page}
+                  pieces={pieces}
+                  activeId={active?.id}
+                  fragmentIndex={fragmentIndex}
+                  mode={mode}
+                  width={REVIEW_PAPER_WIDTH}
+                  busy={busy}
+                  label={label}
+                  onSelect={focus}
+                  onChange={updateRegion}
+                  onDraw={commit}
+                  onCancel={() => setMode("select")}
+                  onDelete={() => {
+                    if (active) removePiece(active);
+                  }}
+                  onUndo={undo}
+                />
+              }
+              preview={
+                active && (
+                  <section
+                    className="selected-piece-preview"
+                    aria-label="미리보기"
+                    key={`preview-${active.id}`}
+                  >
+                    <div
+                      className="review-preview-topline"
+                      data-board-interactive="true"
+                    >
+                      <h4>미리보기</h4>
+                      <div
+                        className="review-preview-modes"
+                        aria-label="미리보기 방식"
+                      >
+                        <button
+                          type="button"
+                          aria-pressed={previewMode === "image"}
+                          onClick={() => setPreviewMode("image")}
+                        >
+                          이미지
+                        </button>
+                        <button
+                          type="button"
+                          aria-pressed={previewMode === "text"}
+                          onClick={() => setPreviewMode("text")}
+                        >
+                          텍스트 편집 · 실험
+                        </button>
+                      </div>
+                    </div>
+                    <div className="review-preview-crops">
+                      {previewPieces.map((item) => (
+                        <div className="review-preview-item" key={item.id}>
+                          <div className="review-preview-heading" role="status">
+                            <h5>
+                              {item.kind === "passage"
+                                ? "공통 지문"
+                                : `문제 ${label(item)}`}
+                            </h5>
+                            {previewSaveScope && (
+                              <p className="review-preview-save-scope">
+                                {previewSaveScope}
+                              </p>
+                            )}
+                          </div>
+                          {previewMode === "text" ? (
+                            <EditablePreview
+                              key={JSON.stringify([
+                                item.id,
+                                item.fragments,
+                                item.cleanPrint,
+                              ])}
+                              piece={item}
+                              pages={initial.pages}
+                              cache={editableCache.current}
+                              busy={busy}
+                            />
+                          ) : (
+                            item.fragments.map((f, i) => (
+                              <PieceThumb
+                                key={`${item.id}-${f.pageId}-${i}`}
+                                page={initial.pages.find(
+                                  (p) => p.id === f.pageId,
+                                )!}
+                                piece={item}
+                                index={i}
+                              />
+                            ))
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )
+              }
             />
             <p className="region-editor-hint">
               {mode === "erase"
                 ? "선택한 문제에서 지울 부분을 드래그하세요. 미리보기와 저장 이미지에 반영돼요."
-                : "빈 곳을 드래그해 추가 · 영역을 잡아 이동 · 모서리로 크기 조절"}
+                : "배경 드래그로 이동 · 시험지 위에서 영역 편집 · Ctrl/⌘ + 휠로 확대"}
               {mode !== "select" && (
-                <button className="text-btn" onClick={() => setMode("select")}>
+                <button
+                  className="text-btn"
+                  onClick={() => {
+                    setHand(false);
+                    setMode("select");
+                  }}
+                >
                   선택 모드로
                 </button>
               )}
@@ -479,130 +574,37 @@ export function DocumentReview({
             aria-label="문제 설정 및 저장"
           >
             <div className="review-sidebar-scroll">
-              <div className="pieces-panel">
-                <div className="pieces-toolbar">
-                  <strong>저장할 문제</strong>
-                  <span className="review-selection-count">
-                    {registrationUnitCount(includedPieces)}개 선택
-                  </span>
-                </div>
-                <div className="review-selection-actions">
-                  <button
-                    className="text-btn"
-                    disabled={busy}
-                    onClick={() => {
-                      setIncluded(
-                        pieces
-                          .filter((p) => p.kind !== "passage")
-                          .map((p) => p.id),
-                      );
-                      setAck(false);
-                    }}
-                  >
-                    전체 선택
-                  </button>
-                  <button
-                    className="text-btn"
-                    disabled={busy}
-                    onClick={() => {
-                      setIncluded([]);
-                      setAck(false);
-                    }}
-                  >
-                    선택 해제
-                  </button>
-                </div>
-                <div className="piece-list compact-piece-list">
-                  {(["passage", "question"] as const).map((kind) => {
-                    const group = pieces.filter((p) =>
-                      kind === "passage"
-                        ? p.kind === "passage"
-                        : p.kind !== "passage",
-                    );
-                    if (kind === "passage" && !group.length) return null;
-                    return (
-                      <section
-                        className="piece-group"
-                        key={kind}
-                        aria-label={
-                          kind === "passage" ? "지문 목록" : "문제 목록"
-                        }
-                      >
-                        <h3>
-                          {kind === "passage" ? "지문" : "문제"}
-                          <span>{group.length}</span>
-                        </h3>
-                        {group.length ? (
-                          <div className="piece-chip-grid">
-                            {group.map((p) => (
-                              <div
-                                key={p.id}
-                                data-piece-id={p.id}
-                                className={`piece-chip ${p.id === active?.id ? "active" : ""} ${bundleOwner(pieces, p.id) ? "bundled" : ""}`}
-                              >
-                                <input
-                                  type="checkbox"
-                                  aria-label={`${p.name} 저장 선택`}
-                                  disabled={
-                                    busy ||
-                                    (!bundleOwner(pieces, p.id) &&
-                                      !included.includes(p.id) &&
-                                      includedPieces.some((x) => x.id === p.id))
-                                  }
-                                  checked={includedPieces.some(
-                                    (x) => x.id === p.id,
-                                  )}
-                                  onChange={(e) => {
-                                    setIncluded((ids) =>
-                                      toggleBundleSelection(
-                                        pieces,
-                                        ids,
-                                        p.id,
-                                        e.target.checked,
-                                      ),
-                                    );
-                                    setAck(false);
-                                  }}
-                                />
-                                <button
-                                  type="button"
-                                  disabled={busy}
-                                  aria-pressed={p.id === active?.id}
-                                  aria-label={`${kind === "passage" ? "지문" : "문제"} ${label(p)} 선택`}
-                                  title={`${bundleOwner(pieces, p.id) ? `${bundleRange(pieces, bundleOwner(pieces, p.id)!)}번 지문 묶음 · ` : ""}${p.name} · ${[...new Set(p.fragments.map((f) => initial.pages.find((page) => page.id === f.pageId)!.index + 1))].join(", ")}쪽`}
-                                  onClick={() => focus(p)}
-                                >
-                                  {p.bundleQuestionIds?.length
-                                    ? `${bundleRange(pieces, p)}번`
-                                    : label(p)}
-                                  {bundleOwner(pieces, p.id) && (
-                                    <Link2
-                                      size={12}
-                                      aria-hidden="true"
-                                      className="piece-bundle-mark"
-                                    />
-                                  )}
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (
-                          <p className="muted">
-                            {kind === "passage"
-                              ? "등록된 지문이 없어요."
-                              : "원본을 드래그해 문제를 추가하세요."}
-                          </p>
-                        )}
-                      </section>
-                    );
-                  })}
-                </div>
-              </div>
+              <ReviewPieceList
+                pieces={pieces}
+                activeId={active?.id}
+                included={included}
+                includedPieces={includedPieces}
+                busy={busy}
+                label={label}
+                onFocus={focus}
+                onToggle={(piece, checked) => {
+                  setIncluded((ids) =>
+                    toggleBundleSelection(pieces, ids, piece.id, checked),
+                  );
+                  setAck(false);
+                }}
+                onSelectAll={() => {
+                  setIncluded(
+                    pieces.filter((p) => p.kind !== "passage").map((p) => p.id),
+                  );
+                  setAck(false);
+                }}
+                onClear={() => {
+                  setIncluded([]);
+                  setAck(false);
+                }}
+              />
               {active && (
                 <div className="review-selected-heading">
                   <h3>
-                    {active.kind === "passage" ? "지문" : "문제"}{" "}
-                    {label(active)}
+                    {activeBundle
+                      ? `${bundleRange(pieces, activeBundle)}번 지문 묶음`
+                      : `${active.kind === "passage" ? "지문" : "문제"} ${label(active)}`}
                   </h3>
                   <button
                     className="text-btn"
@@ -610,83 +612,64 @@ export function DocumentReview({
                     disabled={busy}
                     onClick={() => removePiece(active)}
                   >
-                    <Trash2 size={14} /> 삭제
+                    <Trash2 size={14} />
+                    {activeBundle
+                      ? active.kind === "passage"
+                        ? "지문 삭제"
+                        : `${label(active)}번 삭제`
+                      : "삭제"}
                   </button>
                 </div>
               )}
               {activeBundle && (
-                <div className="review-bundle-notice" role="status">
-                  <div>
-                    <strong>
-                      <Link2 size={15} />
-                      {bundleRange(pieces, activeBundle)}번 지문 묶음
-                    </strong>
-                    <span>
-                      지문과 문제 {bundleMembers(pieces, activeBundle).length}
-                      개가 함께 저장돼요.
-                    </span>
+                <div className="review-bundle-context">
+                  <p className="review-bundle-summary" role="status">
+                    공통 지문 · 문제{" "}
+                    {bundleMembers(pieces, activeBundle).length}개
+                    {activeIncluded ? " 함께 저장" : " · 저장 제외"}
+                  </p>
+                  <div
+                    className="review-member-nav"
+                    aria-label="묶음 영역 선택"
+                  >
+                    {bundlePieces.map((piece) => (
+                      <button
+                        key={piece.id}
+                        type="button"
+                        disabled={busy}
+                        aria-pressed={piece.id === active?.id}
+                        aria-label={`${piece.kind === "passage" ? "지문" : "문제"} ${label(piece)} 영역 선택`}
+                        onClick={() => focus(piece)}
+                      >
+                        {piece.kind === "passage"
+                          ? "지문"
+                          : `${label(piece)}번`}
+                      </button>
+                    ))}
                   </div>
-                  {active?.id !== activeBundle.id && (
-                    <button
-                      className="text-btn"
-                      disabled={busy}
-                      onClick={() => focus(activeBundle)}
-                    >
-                      묶음 수정
-                    </button>
-                  )}
+                  <details
+                    className="review-bundle-range"
+                    key={activeBundle.id}
+                  >
+                    <summary>묶음 범위 수정</summary>
+                    <PassageGroupEditor
+                      key={`${activeBundle.id}:${activeBundle.bundleQuestionIds?.join(",")}`}
+                      passage={activeBundle}
+                      pieces={pieces}
+                      busy={busy}
+                      onChange={(next) => updateBundle(next, activeBundle.id)}
+                    />
+                  </details>
                 </div>
               )}
-              {active?.kind === "passage" && (
+              {!activeBundle && active?.kind === "passage" && (
                 <PassageGroupEditor
-                  key={`${active.id}:${active.bundleQuestionIds?.join(",") ?? ""}`}
+                  key={active.id}
                   passage={active}
                   pieces={pieces}
                   busy={busy}
-                  onChange={(next) => {
-                    change(next);
-                    setError("");
-                    const group = next.find((p) => p.id === active.id);
-                    if (group?.bundleQuestionIds?.length)
-                      setIncluded((ids) => [
-                        ...new Set([
-                          ...ids,
-                          group.id,
-                          ...group.bundleQuestionIds!,
-                        ]),
-                      ]);
-                  }}
+                  onChange={(next) => updateBundle(next, active.id)}
                 />
-              )}
-              {active && (
-                <section
-                  className="selected-piece-preview"
-                  aria-label="미리보기"
-                  key={`preview-${active.id}`}
-                >
-                  <h4>미리보기</h4>
-                  <div className="review-preview-crops">
-                    {previewPieces.map((item) => (
-                      <div className="review-preview-item" key={item.id}>
-                        {activeBundle && (
-                          <h5>
-                            {item.kind === "passage"
-                              ? "공통 지문"
-                              : `문제 ${label(item)}`}
-                          </h5>
-                        )}
-                        {item.fragments.map((f, i) => (
-                          <PieceThumb
-                            key={`${item.id}-${f.pageId}-${i}`}
-                            page={initial.pages.find((p) => p.id === f.pageId)!}
-                            piece={item}
-                            index={i}
-                          />
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </section>
               )}
               {error && (
                 <p className="error" role="alert">

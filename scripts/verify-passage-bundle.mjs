@@ -21,11 +21,12 @@ export async function verifyPassageBundle(page, base) {
     { steps: 8 },
   );
   await page.mouse.up();
-  const passage = page
+  const createdPassage = page
     .getByRole("region", { name: "지문 목록" })
     .locator(".piece-chip")
     .last();
-  const passageId = await passage.getAttribute("data-piece-id");
+  const passageId = await createdPassage.getAttribute("data-piece-id");
+  const passage = page.locator(`.piece-chip[data-piece-id="${passageId}"]`);
   const passageCheck = passage.locator("input").first();
   await page
     .getByRole("combobox", { name: "묶음 시작 문제" })
@@ -49,37 +50,89 @@ export async function verifyPassageBundle(page, base) {
     .getByRole("button", { name: "한 문제로 묶기", exact: true })
     .click();
   await expect(passage.getByRole("button")).toHaveText("1–3번");
-  await page.getByRole("button", { name: "문제 1 선택", exact: true }).click();
-  await expect(page.locator(".review-bundle-notice")).toContainText(
+  await page
+    .getByRole("button", { name: "문제 1 영역 선택", exact: true })
+    .click();
+  await expect(page.locator(".review-selected-heading")).toContainText(
     "1–3번 지문 묶음",
+  );
+  await expect(page.locator(".pieces-panel input[type=checkbox]")).toHaveCount(
+    0,
+  );
+  for (const id of ids)
+    await expect(
+      page.locator(`.piece-chip[data-piece-id="${id}"]`),
+    ).toHaveCount(0);
+  await expect(
+    page.locator(".selected-piece-preview .piece-thumb"),
+  ).toHaveCount(1);
+  await expect(page.locator(".review-preview-item h5")).toHaveText(["문제 1"]);
+  await expect(page.locator(".review-member-nav button")).toHaveCount(4);
+  const saveScope = page.locator(".review-preview-save-scope");
+  await expect(saveScope).toHaveText("공통 지문 + 1–3번 묶음으로 저장");
+  await page.locator(".review-member-nav button").first().click();
+  await expect(page.locator(".review-preview-item h5")).toHaveText([
+    "공통 지문",
+  ]);
+  await expect(
+    page.locator(".region-overlay.active .region-caption"),
+  ).toHaveText("공통 지문");
+  const activeColor = await page
+    .locator(".region-overlay.active")
+    .evaluate((el) => getComputedStyle(el).borderTopColor);
+  assert.equal(
+    await page
+      .locator(".review-preview-heading h5")
+      .evaluate((el) => getComputedStyle(el).color),
+    activeColor,
+  );
+  assert.equal(
+    await page
+      .locator('.review-member-nav button[aria-pressed="true"]')
+      .evaluate((el) => getComputedStyle(el).color),
+    activeColor,
   );
   await expect(
     page.locator(".selected-piece-preview .piece-thumb"),
-  ).toHaveCount(4);
-  await expect(page.locator(".review-preview-item h5")).toHaveText([
-    "공통 지문",
-    "문제 1",
-    "문제 2",
-    "문제 3",
-  ]);
+  ).toHaveCount(1);
+  await page
+    .getByRole("button", { name: "문제 2 영역 선택", exact: true })
+    .click();
+  await expect(page.locator(".review-preview-item h5")).toHaveText(["문제 2"]);
+  await page
+    .locator(`.region-overlay[data-piece-id="${ids[0]}"] .region-body`)
+    .click();
+  await expect(page.locator(".review-preview-item h5")).toHaveText(["문제 1"]);
+  await expect
+    .poll(async () =>
+      page
+        .locator(".selected-piece-preview .piece-thumb img")
+        .evaluateAll(
+          (els) =>
+            els.length > 0 &&
+            els.every((el) => el.complete && el.naturalWidth > 0),
+        ),
+    )
+    .toBe(true);
   await page.screenshot({ path: "/tmp/teachbay-bundle-member-preview.png" });
-  await page.getByRole("button", { name: "묶음 수정", exact: true }).click();
+  await page.locator(".review-bundle-range > summary").click();
 
   await expect(page.locator(".selected-piece-preview")).toBeVisible();
   await expect(
     page.locator(".selected-piece-preview .piece-thumb"),
-  ).toHaveCount(4);
+  ).toHaveCount(1);
   await page
     .getByRole("combobox", { name: "묶음 끝 문제" })
     .selectOption(ids[1]);
   await page.getByRole("button", { name: "범위 변경", exact: true }).click();
   await expect(passage.getByRole("button")).toHaveText("1–2번");
+  await expect(saveScope).toHaveText("공통 지문 + 1–2번 묶음으로 저장");
   await page
     .getByRole("button", { name: "영역 수정 되돌리기", exact: true })
     .click();
   await expect(passage.getByRole("button")).toHaveText("1–3번");
   await page.getByRole("button", { name: "묶기 해제", exact: true }).click();
-  await expect(page.locator(".review-bundle-notice")).toHaveCount(0);
+  await expect(page.locator(".review-bundle-summary")).toHaveCount(0);
   await expect(
     page.locator(".selected-piece-preview .piece-thumb"),
   ).toHaveCount(1);
@@ -90,23 +143,26 @@ export async function verifyPassageBundle(page, base) {
     .getByRole("button", { name: "영역 수정 되돌리기", exact: true })
     .click();
   await expect(passage.getByRole("button")).toHaveText("1–3번");
+  await page.getByRole("button", { name: "선택 변경", exact: true }).click();
   await page.getByRole("button", { name: "선택 해제", exact: true }).click();
   await passageCheck.check();
-  await expect(page.locator(".piece-chip input:checked")).toHaveCount(4);
-  await page
-    .locator(`.piece-chip[data-piece-id="${ids[1]}"] input`)
-    .first()
-    .uncheck();
+  await expect(page.locator(".piece-chip input:checked")).toHaveCount(1);
+  await passageCheck.uncheck();
   await expect(page.locator(".piece-chip input:checked")).toHaveCount(0);
+  await expect(saveScope).toHaveText("1–3번 묶음 · 저장 제외");
+  await expect(page.locator(".review-bundle-summary")).toContainText(
+    "저장 제외",
+  );
   await passageCheck.check();
   await expect(
     page.getByRole("button", { name: "1문제 저장", exact: true }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "선택 완료", exact: true }).click();
+  await expect(page.locator(".pieces-panel input")).toHaveCount(0);
+  await expect(saveScope).toHaveText("공통 지문 + 1–3번 묶음으로 저장");
   await page.screenshot({ path: "/tmp/teachbay-passage-bundle.png" });
   await page.setViewportSize({ width: 390, height: 844 });
-  await page
-    .getByRole("region", { name: "지문 문제 묶기" })
-    .scrollIntoViewIfNeeded();
+  await page.locator(".pieces-panel").scrollIntoViewIfNeeded();
   assert(
     await page
       .getByRole("dialog")
@@ -183,35 +239,38 @@ export async function verifyPassageBundle(page, base) {
   await page.reload();
   await expect(page).toHaveURL(base + "/exams/new");
   console.log(
-    "PASS: range validation, grouping/narrowing/undo/ungroup, unit selection, combined preview, mobile width, one library row, original members preserved, one exam snapshot with all fragments.",
+    "PASS: range validation, grouping/narrowing/undo/ungroup, unit selection, active-only preview with intact membership, mobile width, one library row, original members preserved, one exam snapshot with all fragments.",
   );
 }
 
 export async function verifyAutomaticPassageBundle(page, base) {
-  const initialPassage = page
-    .locator('.piece-group[aria-label="지문 목록"] .piece-chip.bundled')
-    .first();
-  await expect(initialPassage).toBeVisible();
-  const passageId = await initialPassage.getAttribute("data-piece-id");
+  const passageId = await page
+    .locator('.piece-group[aria-label="지문 묶음 목록"] .piece-chip')
+    .first()
+    .getAttribute("data-piece-id");
   const passage = page.locator(`.piece-chip[data-piece-id="${passageId}"]`);
   await passage.getByRole("button").click();
-  const notice = page.locator(".review-bundle-notice");
-  await expect(notice).toContainText("지문 묶음");
+  const notice = page.locator(".review-bundle-summary");
   const memberCount = Number(
     (await notice.textContent()).match(/문제 (\d+)개/)[1],
   );
   assert(memberCount > 0);
+  await expect(page.locator(".pieces-panel input")).toHaveCount(0);
+  await page.locator(".review-bundle-range > summary").click();
   const memberId = await page
     .getByRole("combobox", { name: "묶음 시작 문제" })
     .inputValue();
-  const member = page.locator(`.piece-chip[data-piece-id="${memberId}"]`);
-  await member.getByRole("button").click();
-  await expect(page.locator(".review-preview-item")).toHaveCount(
+  await expect(
+    page.locator(`.piece-chip[data-piece-id="${memberId}"]`),
+  ).toHaveCount(0);
+  await page.locator(".review-member-nav button").nth(1).click();
+  await expect(page.locator(".review-preview-item")).toHaveCount(1);
+  await expect(page.locator(".review-member-nav button")).toHaveCount(
     memberCount + 1,
   );
-  await page.getByRole("button", { name: "묶음 수정", exact: true }).click();
   await page.getByRole("button", { name: "묶기 해제", exact: true }).click();
   await expect(notice).toHaveCount(0);
+  const member = page.locator(`.piece-chip[data-piece-id="${memberId}"]`);
   await member.getByRole("button").click();
   await expect(page.locator(".review-preview-item")).toHaveCount(1);
   await passage.getByRole("button").click();
@@ -222,11 +281,14 @@ export async function verifyAutomaticPassageBundle(page, base) {
     .getByRole("button", { name: "영역 수정 되돌리기", exact: true })
     .click();
   await expect(notice).toBeVisible();
+  await page.getByRole("button", { name: "선택 변경", exact: true }).click();
   await page.getByRole("button", { name: "선택 해제", exact: true }).click();
-  await member.locator("input").check();
+  await passage.locator("input").check();
+  await expect(page.locator(".piece-chip input:checked")).toHaveCount(1);
   await expect(
     page.getByRole("button", { name: "1문제 저장", exact: true }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "선택 완료", exact: true }).click();
   await page.screenshot({ path: "/tmp/teachbay-auto-bundle.png" });
   await page.getByRole("checkbox", { name: /저장할 문제를 확인/ }).check();
   await page.getByRole("button", { name: "1문제 저장", exact: true }).click();
@@ -241,6 +303,6 @@ export async function verifyAutomaticPassageBundle(page, base) {
   await page.reload();
   await expect(page.locator(".question-bundle-badge")).toBeVisible();
   console.log(
-    "PASS: fresh import auto-bundle, all-member preview, ungroup stays ungrouped across selection, undo, unit selection, one saved bundle survives reload.",
+    "PASS: initial bundles shown once, member navigation, ungroup/undo, opt-in unit selection, one saved bundle survives reload.",
   );
 }

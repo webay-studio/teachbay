@@ -108,6 +108,7 @@ try {
     "save stays within the modal viewport",
   );
   await page.screenshot({ path: "/tmp/teachbay-document-review.png" });
+  await page.getByRole("button", { name: "선택 변경", exact: true }).click();
   const firstCheckbox = page
     .locator('.piece-group[aria-label="문제 목록"] .piece-chip input')
     .first();

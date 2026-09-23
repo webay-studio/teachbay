@@ -45,7 +45,7 @@ export function RegionCanvas({
   activeId,
   fragmentIndex,
   mode,
-  zoom,
+  width,
   busy,
   label,
   onSelect,
@@ -60,7 +60,7 @@ export function RegionCanvas({
   activeId?: string;
   fragmentIndex: number;
   mode: "select" | "new" | "erase";
-  zoom: number;
+  width: number;
   busy: boolean;
   label: (piece: Piece) => string;
   onSelect: (piece: Piece, index: number) => void;
@@ -71,33 +71,6 @@ export function RegionCanvas({
   onUndo: () => void;
 }) {
   const stage = useRef<HTMLDivElement>(null);
-  const viewport = useRef<HTMLDivElement>(null);
-  const [pageWidth, setPageWidth] = useState<number>();
-  useEffect(() => {
-    const element = viewport.current;
-    if (!element) return;
-    const fit = () => {
-      const style = getComputedStyle(element);
-      const width =
-        element.clientWidth -
-        parseFloat(style.paddingLeft) -
-        parseFloat(style.paddingRight);
-      const height =
-        element.clientHeight -
-        parseFloat(style.paddingTop) -
-        parseFloat(style.paddingBottom);
-      if (width <= 0 || height <= 0) return;
-      setPageWidth(
-        window.innerWidth > 900
-          ? Math.min(width, (height * page.asset.width) / page.asset.height)
-          : width,
-      );
-    };
-    const observer = new ResizeObserver(fit);
-    observer.observe(element);
-    fit();
-    return () => observer.disconnect();
-  }, [page.asset.width, page.asset.height]);
   const gesture = useRef<Gesture | undefined>(undefined);
   const [preview, setPreview] = useState<Gesture>();
   const url = useBlobUrl(page.asset.blob);
@@ -222,7 +195,7 @@ export function RegionCanvas({
     );
   }
   return (
-    <div className="source-canvas-scroll" ref={viewport}>
+    <div className="source-canvas-scroll">
       <div
         ref={stage}
         tabIndex={0}
@@ -230,7 +203,7 @@ export function RegionCanvas({
         aria-label="원본 영역 편집기"
         className={`source-stage region-editor-canvas ${mode !== "select" ? "drawing" : ""}`}
         style={{
-          width: pageWidth ? `${pageWidth * zoom}px` : `${zoom * 100}%`,
+          width: `${width}px`,
           maxWidth: "none",
         }}
         onPointerDown={(e) => start(e)}
@@ -271,14 +244,20 @@ export function RegionCanvas({
                   className="region-body"
                   disabled={busy || mode !== "select"}
                   aria-label={`${piece.name}, ${index + 1}번째 영역 선택`}
+                  aria-pressed={active}
                   onPointerDown={(e) => start(e, piece, index)}
                   onClick={(e) => {
                     if (e.detail === 0) onSelect(piece, index);
                   }}
                 >
                   <span className="region-caption">
-                    {piece.kind === "passage" ? "지문 " : ""}
-                    {label(piece)}
+                    {piece.kind === "passage"
+                      ? active
+                        ? "공통 지문"
+                        : `지문 ${label(piece)}`
+                      : active
+                        ? `문제 ${label(piece)}`
+                        : label(piece)}
                   </span>
                 </button>
                 {active &&
