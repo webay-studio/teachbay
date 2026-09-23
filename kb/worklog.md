@@ -5,7 +5,7 @@
 ## 2026-09-23 — 누적 등록 개선 커밋·푸시 요청
 - 범위: 파일 drop→모달/분석 안내/직접 영역 editor/번호·배점 제거/지문 자동 묶음/헤더 저장·큰 preview/목록 scroll 제거 + AGENTS/kb·검증 스크립트.
 - 검증: 최신 격리 build·타입 검사 통과(next-env 복원), diff 검사 통과. 이전 기본81/UI6·Chrome 검증은 각 항목 참조. 기존 이슈 유지(KB-011 전체20쪽 시간 제한 포함).
-- Git: origin fetch 완료; commit/push 결과는 완료 후 갱신.
+- Git: `5543512` 구현+AGENTS/kb 커밋, `origin/main` push 성공(b6fe8b0→5543512). 직후 HEAD=origin/main·clean 확인. 이 항목은 후속 문서 기록.
 
 ## 2026-09-23 — 저장할 문제 목록 스크롤 제거
 - 변경: `studio.css` compact list 높이 제한·내부 overflow 제거(모바일/지문 조건 포함). `document-review.tsx` 목록 내부 자동 scroll 제거. 전체 번호 펼침, 긴 내용은 sidebar/모달 본문 scroll.

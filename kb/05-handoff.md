@@ -1,7 +1,7 @@
 # Handoff · 2026-09-23
 
 ## 현재
-- main, b6fe8b0 이후 등록/editor 변경 사용자 요청으로 커밋·푸시 진행. origin fetch 완료; 최종 결과 worklog 참조.
+- main: 등록/editor 누적 구현 `5543512` origin/main push 확인(2026-09-23). AGENTS/kb 포함; 후속 문서 기록은 이 커밋 이후. 실제 최신 HEAD는 git log/status 확인.
 - `/questions/new` 직접 접속/새로고침 → `/questions`; `/question/new` 별칭도 동일. 내부 이동은 인터셉트 모달 유지.
 - 빈 보관함 클릭/드롭 → File 메모리 1회 전달 → 등록 모달 자동 처리; 선택 취소는 열지 않음.
 - 분석: 실제 원본·쪽수·진행선·중앙 종이 모션. 원본 스캔 선 제거(최신 결정). PDF 실제 stage별 쉬운 설명+재확인 이유. OCR 규칙/패스 유지.
