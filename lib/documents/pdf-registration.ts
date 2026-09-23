@@ -1,9 +1,15 @@
+import { autoBundlePassages } from "./passage-bundles";
 import {
   analyzePdf,
   type PdfAnalysisResult,
   type QuestionPart,
 } from "../pdf-region-engine";
-import type { ImportedDocument, ImportProgress, Piece } from "./types";
+import type {
+  ImportedDocument,
+  ImportProgress,
+  Piece,
+  PagePreview,
+} from "./types";
 
 /** Adapt engine ownership without re-segmenting or merging physical fragments. */
 export function analysisToDocument(
@@ -12,6 +18,19 @@ export function analysisToDocument(
 ): ImportedDocument {
   const pages = result.pages.map((p) => ({
     ...p,
+    printTokens: p.observations
+      .filter(
+        (o) =>
+          o.state === "supported" &&
+          o.geometryStatus !== "uncertain" &&
+          o.textStatus !== "encoding-suspect",
+      )
+      .map((o) => ({
+        ...o.rect,
+        text: o.text,
+        confidence: o.confidence ?? 100,
+        group: o.passId,
+      })),
     asset: p.analysisAsset ?? p.asset,
   }));
   const fragments = (parts: QuestionPart[]) =>
@@ -21,6 +40,7 @@ export function analysisToDocument(
         throw new Error("문항에 필요한 원본 페이지를 찾을 수 없습니다.");
       return {
         pageId: page.id,
+        numberOnly: part.role === "number-only",
         rect: {
           x: part.bbox.x,
           y: part.bbox.y,
@@ -78,7 +98,7 @@ export function analysisToDocument(
     filename: original.name,
     original,
     pages,
-    pieces,
+    pieces: autoBundlePassages(pieces),
     engine: "pdf-regions",
     originalAssets: result.pages.map((p) => p.asset),
     warnings: [
@@ -96,6 +116,7 @@ export async function importPdfQuestions(
   onProgress: (p: ImportProgress) => void,
   signal: AbortSignal,
   removeInk = true,
+  onPageRendered?: (page: PagePreview) => void,
 ) {
   const result = await analyzePdf(file, signal, onProgress, {
     removeInk,
@@ -104,6 +125,7 @@ export async function importPdfQuestions(
     ocrPolicy: "legacy",
     connectivity: 4,
     maxPages: 40,
+    onPageRendered,
   });
   const doc = analysisToDocument(result, file);
   doc.sha256 = Array.from(

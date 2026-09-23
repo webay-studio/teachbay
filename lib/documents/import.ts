@@ -1,3 +1,4 @@
+import { autoBundlePassages } from "./passage-bundles";
 import { recognizeRegions } from "./ocr";
 import type { ImageAsset } from "../types";
 import type {
@@ -80,12 +81,13 @@ export async function importDocument(
   file: File,
   onProgress: (p: ImportProgress) => void,
   signal: AbortSignal,
+  onPageRendered?: (page: import("./types").PagePreview) => void,
 ): Promise<ImportedDocument> {
   if (file.size > 50 * 1024 * 1024)
     throw new Error("PDF·한글 문서는 파일당 50MB 이하로 올려주세요.");
   if (/\.pdf$/i.test(file.name) || file.type === "application/pdf") {
     const { importPdfQuestions } = await import("./pdf-registration");
-    return importPdfQuestions(file, onProgress, signal);
+    return importPdfQuestions(file, onProgress, signal, true, onPageRendered);
   }
   const pages: DocumentPage[] = [];
   const warnings: string[] = [];
@@ -227,6 +229,7 @@ export async function importDocument(
       method,
       warnings: pageWarnings,
     });
+    onPageRendered?.({ index, asset: pages[pages.length - 1].asset });
     onProgress({
       current: index + 1,
       total,
@@ -328,7 +331,7 @@ export async function importDocument(
         .map((x) => x.toString(16).padStart(2, "0"))
         .join(""),
       pages,
-      pieces: segmentDocument(pages),
+      pieces: autoBundlePassages(segmentDocument(pages)),
       warnings,
     };
   } catch (e) {

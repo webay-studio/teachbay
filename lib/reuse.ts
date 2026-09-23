@@ -19,6 +19,7 @@ export function snapshotQuestion(
   });
   return structuredClone({
     id: q.id,
+    bundle: q.bundle,
     name: q.name,
     assetId: q.assetId,
     fragments: q.fragments,

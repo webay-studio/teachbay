@@ -1,11 +1,22 @@
 "use client";
 import { Search, Check, Plus } from "lucide-react";
-import Link from "next/link";
+import { useRef, useState } from "react";
+import { DOCUMENT_ACCEPT } from "@/screens/registration/_lib/registration.lib";
 import { QuestionCard } from "../_component/QuestionCard";
 import { useQuestionsHandler } from "../_handler/Questions.handler";
 export function QuestionListAction() {
-  const { loading, rows, filtered, setQuery, selected, toggleVisible } =
-    useQuestionsHandler();
+  const {
+    loading,
+    rows,
+    filtered,
+    setQuery,
+    selected,
+    toggleVisible,
+    registerFiles,
+  } = useQuestionsHandler();
+  const input = useRef<HTMLInputElement>(null);
+  const dragDepth = useRef(0);
+  const [dragging, setDragging] = useState(false);
   return (
     <>
       {" "}
@@ -13,9 +24,48 @@ export function QuestionListAction() {
         <div className="empty">문제를 불러오는 중…</div>
       ) : rows.length === 0 ? (
         <section
-          className="library-start"
+          className={`library-start${dragging ? " dragging" : ""}`}
           aria-labelledby="library-start-title"
+          onDragEnter={(e) => {
+            if (!e.dataTransfer.types.includes("Files")) return;
+            e.preventDefault();
+            dragDepth.current += 1;
+            setDragging(true);
+          }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "copy";
+          }}
+          onDragLeave={() => {
+            dragDepth.current = Math.max(0, dragDepth.current - 1);
+            if (!dragDepth.current) setDragging(false);
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            dragDepth.current = 0;
+            setDragging(false);
+            registerFiles(Array.from(e.dataTransfer.files));
+          }}
         >
+          <input
+            ref={input}
+            hidden
+            type="file"
+            multiple
+            accept={`image/jpeg,image/png,image/webp,${DOCUMENT_ACCEPT}`}
+            aria-label="등록할 문제 파일"
+            onChange={(e) => {
+              registerFiles(Array.from(e.target.files ?? []));
+              e.target.value = "";
+            }}
+          />
+          <button
+            type="button"
+            className="library-start-picker"
+            aria-label="문제 파일 선택"
+            aria-describedby="library-start-help"
+            onClick={() => input.current?.click()}
+          />
           <div className="library-paper" aria-hidden="true">
             <div className="library-paper-top">나의 문제 모음</div>
             <div className="library-paper-rule" />
@@ -41,14 +91,14 @@ export function QuestionListAction() {
           <div className="library-start-copy">
             <span className="library-start-label">내 문제 보관함</span>
             <h2 id="library-start-title">아직 등록한 문제가 없어요.</h2>
-            <p>
-              가지고 있는 시험지에서 문제를 모아보세요.
+            <p id="library-start-help">
+              파일을 여기에 끌어다 놓거나 클릭해보세요.
               <br />
-              필요한 문제를 골라 새 시험지로 만들 수 있어요.
+              문제를 모아 나만의 시험지로 만들 수 있어요.
             </p>
-            <Link href="/questions/new" scroll={false} className="btn primary">
-              <Plus size={17} /> 첫 문제 등록하기
-            </Link>
+            <span className="btn primary" aria-hidden="true">
+              <Plus size={17} /> 파일 선택하기
+            </span>
             <small>이미지 · PDF · 한글 파일</small>
           </div>
         </section>

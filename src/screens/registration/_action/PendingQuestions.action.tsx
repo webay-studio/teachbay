@@ -1,4 +1,5 @@
 "use client";
+import { RegistrationHeaderActions } from "@ui/documents/registration-header";
 import { Scissors, X, ArrowRight } from "lucide-react";
 import { UploadPreview } from "../_component/UploadPreview";
 import { useRegistrationHandler } from "../_handler/Registration.handler";
@@ -87,12 +88,7 @@ export function PendingQuestionsAction() {
               </article>
             ))}
           </div>
-          <div className="save-footer">
-            <span>
-              {documents.length
-                ? `문서 ${documents.length}개의 분리 결과를 먼저 검토하거나 제외해주세요.`
-                : "원본 화질로 보관해 선명하게 출력해요."}
-            </span>
+          <RegistrationHeaderActions>
             <button
               className="btn primary"
               disabled={busy || reading > 0 || documents.length > 0}
@@ -101,7 +97,7 @@ export function PendingQuestionsAction() {
               {busy ? "저장하는 중…" : `문제 ${rows.length}개 저장`}
               <ArrowRight size={17} />
             </button>
-          </div>
+          </RegistrationHeaderActions>
         </>
       )}
     </>

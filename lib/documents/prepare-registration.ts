@@ -1,5 +1,6 @@
 import type { ImportedDocument, Piece, PendingQuestion } from "./types";
 import type { StoredDocument, Question } from "../types";
+import { bundleRegistrationRows } from "./passage-bundles";
 import { composePiece } from "./compose";
 import { reviewErrors } from "./review";
 export async function prepareRegistration(
@@ -17,6 +18,10 @@ export async function prepareRegistration(
   }
   if (!doc.original)
     throw new Error("원본 파일을 찾을 수 없습니다. 다시 등록해주세요.");
+  const published = bundleRegistrationRows(pieces, rows);
+  const allRows = [
+    ...new Map([...rows, ...published].map((r) => [r.id, r])).values(),
+  ];
   const now = new Date().toISOString();
   const record: StoredDocument = {
     id: doc.id,
@@ -29,10 +34,11 @@ export async function prepareRegistration(
       assetId: p.asset.id,
       sourceToAnalysis: p.sourceToAnalysis ?? [1, 0, 0, 0, 1, 0, 0, 0, 1],
     })),
-    items: rows.map(
+    items: allRows.map(
       (r) =>
         ({
           id: r.id,
+          bundle: r.bundle,
           name: r.name,
           filename: r.filename,
           memo: r.memo,
@@ -89,10 +95,10 @@ export async function prepareRegistration(
     ...doc.pages.map((p) => p.asset),
     ...(doc.originalAssets ?? []),
   ];
-  rows.forEach((r) => {
+  published.forEach((r) => {
     r.document = record;
     r.extraAssets = allAssets;
   });
 
-  return rows;
+  return published;
 }

@@ -83,11 +83,19 @@ export async function analyzePdf(
         current: index,
         total: pdf.numPages,
         message: `${index + 1}/${pdf.numPages}쪽 · 원본 렌더링`,
+        stage: "rendering",
       });
       await abortable(page.render({ canvas, viewport }).promise, signal);
       const originalAsset = await canvasAsset(canvas),
         before = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      options.onPageRendered?.({ index, asset: originalAsset });
       const renderMs = performance.now() - started;
+      progress({
+        current: index,
+        total: pdf.numPages,
+        message: `${index + 1}/${pdf.numPages}쪽 · 문제 영역 분석`,
+        stage: "locating",
+      });
       let annotationCount = 0,
         stats: InkStats | undefined;
       if (options.removeInk) {
@@ -325,12 +333,27 @@ export async function analyzePdf(
         const passId = `ocr-${index}-${ocrPasses++}${highResolution ? "-roi-original-2x" : ""}`,
           toCanvas: Matrix3 = [1 / factor, 0, sx, 0, 1 / factor, sy, 0, 0, 1];
         ocrCrops.push({ passId, rect: r, toCanvas });
-        try {
+        const wholePage = r.x === 0 && r.y === 0 && r.w === 1 && r.h === 1;
+        const ocrStage: ImportProgress["stage"] = digitsOnly
+          ? "ocr-pagination"
+          : highResolution
+            ? "ocr-number-zoom"
+            : mode === PSM.SPARSE_TEXT
+              ? wholePage
+                ? "ocr-detail"
+                : "ocr-number-check"
+              : wholePage
+                ? "ocr-page"
+                : "ocr-column";
+        const reportOCR = (stage: ImportProgress["stage"] = ocrStage) =>
           progress({
             current: index,
             total: pdf.numPages,
             message: `${index + 1}/${pdf.numPages}쪽 · 필요한 영역 OCR (${ocrPasses})`,
+            stage,
           });
+        try {
+          reportOCR();
           checkCancelled(signal);
           const cacheStarted = performance.now();
           const cacheKey = globalThis.crypto?.subtle
@@ -347,12 +370,16 @@ export async function analyzePdf(
           let recognizedLines = cacheKey ? ocrResults.get(cacheKey) : undefined;
           ocrCacheMs += performance.now() - cacheStarted;
           checkCancelled(signal);
-          if (recognizedLines) ocrCacheHits++;
-          else {
+          if (recognizedLines) {
+            ocrCacheHits++;
+            reportOCR("ocr-reuse");
+          } else {
             if (!worker) {
+              reportOCR("ocr-loading");
               lease = await acquireOCR(signal);
               worker = lease.worker;
               workerLoadMs += lease.loadMs;
+              reportOCR();
             }
             await worker.setParameters({
               tessedit_pageseg_mode: mode,
@@ -536,6 +563,12 @@ export async function analyzePdf(
         options.shapeFilter &&
         !options.distributionOnly
       ) {
+        progress({
+          current: index,
+          total: pdf.numPages,
+          message: `${index + 1}/${pdf.numPages}쪽 · 형태 분류`,
+          stage: "shape-check",
+        });
         colorAsset = analysisAsset;
         const filtered = await suppressIsolatedInk(
           canvas,
@@ -627,8 +660,15 @@ export async function analyzePdf(
         current: index + 1,
         total: pdf.numPages,
         message: `${index + 1}/${pdf.numPages}쪽 · 관측 확보 완료`,
+        stage: "page-ready",
       });
     }
+    progress({
+      current: pdf.numPages,
+      total: pdf.numPages,
+      message: "페이지 간 문항·지문 연결 분석",
+      stage: "assembling",
+    });
     const structure = options.distributionOnly
       ? { lines: [], groups: [], relations: [] }
       : buildStructure(lines, pages.length, []);

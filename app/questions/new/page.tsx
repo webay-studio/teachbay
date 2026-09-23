@@ -1,4 +1,4 @@
-import RegistrationScreen from "@/screens/registration/RegistrationScreen";
+import { redirect } from "next/navigation";
 export default function Page() {
-  return <RegistrationScreen />;
+  redirect("/questions");
 }

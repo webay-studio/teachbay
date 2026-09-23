@@ -2,6 +2,7 @@
 import { createContext, useContext, type ReactNode } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useRegistrationIntake } from "@/_state/RegistrationIntake";
 import { errorText } from "@engine/db";
 import type {
   PendingQuestion,
@@ -33,6 +34,17 @@ function useRegistrationController() {
     cancel,
   } = state;
   const router = useRouter();
+  const intake = useRegistrationIntake();
+  useEffect(() => {
+    let active = true;
+    // Start after effect replay so Strict Mode cannot consume then cancel files.
+    queueMicrotask(() => {
+      if (active) void ingest(intake.take());
+    });
+    return () => {
+      active = false;
+    };
+  }, [intake]);
   useEffect(
     () => () => {
       cancel.current?.abort();
@@ -71,7 +83,29 @@ function useRegistrationController() {
         };
         try {
           if (isDocument(file)) {
-            const doc = await readDocument(file, report, controller.signal);
+            const doc = await readDocument(
+              file,
+              report,
+              controller.signal,
+              (page) => {
+                if (controller.signal.aborted) return;
+                setJobs((prev) =>
+                  prev.map((job) =>
+                    job.id === id
+                      ? {
+                          ...job,
+                          previews: [
+                            ...job.previews.filter(
+                              (p) => p.index !== page.index,
+                            ),
+                            page,
+                          ],
+                        }
+                      : job,
+                  ),
+                );
+              },
+            );
             if (controller.signal.aborted) break;
             setDocuments((prev) => [...prev, doc]);
             setReviewId((prev) => prev ?? doc.id);

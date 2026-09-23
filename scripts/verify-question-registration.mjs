@@ -2,7 +2,10 @@ import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 const input = process.argv[2] || process.env.TEST_PDF;
-if (!input) throw new Error("Pass the Korean geography regression PDF path as an argument or TEST_PDF.");
+if (!input)
+  throw new Error(
+    "Pass the Korean geography regression PDF path as an argument or TEST_PDF.",
+  );
 const out = "output/registration-v2/integration";
 await fs.mkdir(out, { recursive: true });
 const browser = await chromium.launch({
@@ -28,9 +31,7 @@ try {
     await page.locator(".topbar:visible,.heading:visible").count(),
     0,
   );
-  const buffer = await fs.readFile(
-    input,
-  );
+  const buffer = await fs.readFile(input);
   await page
     .locator("input[type=file]")
     .first()
@@ -86,7 +87,7 @@ try {
   );
   await page.screenshot({ path: out + "/mobile-review.png", fullPage: true });
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.getByRole("checkbox", { name: /선택한 문제의 내용/ }).check();
+  await page.getByRole("checkbox", { name: /저장할 문제를 확인/ }).check();
   await page.getByRole("button", { name: "1문제 저장", exact: true }).click();
   await page
     .locator(".registration-file-row")

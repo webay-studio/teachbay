@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { RegistrationIntakeProvider } from "@/_state/RegistrationIntake";
 import "./globals.css";
 const pretendard = localFont({
   src: "./fonts/PretendardVariable.woff2",
@@ -22,8 +23,10 @@ export default function RootLayout({
   return (
     <html lang="ko" className={pretendard.variable}>
       <body>
-        {children}
-        {modal}
+        <RegistrationIntakeProvider>
+          {children}
+          {modal}
+        </RegistrationIntakeProvider>
       </body>
     </html>
   );

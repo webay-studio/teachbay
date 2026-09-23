@@ -19,22 +19,18 @@ export function FilePickerAction() {
           e.target.value = "";
         }}
       />
-      <button
-        className={empty ? "registration-drop-target" : "registration-add-file"}
-        disabled={busy || reading > 0}
-        onClick={() => input.current?.click()}
-      >
-        <Plus size={empty ? 36 : 16} strokeWidth={1.5} />
-        {empty ? (
-          <>
-            <strong>파일을 여기에 놓아주세요</strong>
-            <span>또는 클릭해서 파일 선택</span>
-            <small>PDF · HWP · HWPX · JPG · PNG · WebP</small>
-          </>
-        ) : (
-          <span>파일 추가</span>
-        )}
-      </button>
+      {empty && (
+        <button
+          className="registration-drop-target"
+          disabled={busy}
+          onClick={() => input.current?.click()}
+        >
+          <Plus size={36} strokeWidth={1.5} />
+          <strong>파일을 여기에 놓아주세요</strong>
+          <span>또는 클릭해서 파일 선택</span>
+          <small>PDF · HWP · HWPX · JPG · PNG · WebP</small>
+        </button>
+      )}
     </>
   );
 }

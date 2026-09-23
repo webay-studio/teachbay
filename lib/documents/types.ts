@@ -7,12 +7,16 @@ export type {
   ImportProgress,
 } from "../pdf-region-engine/base-types";
 export type Fragment = {
+  numberOnly?: boolean;
+  erasures?: Rect[];
   pageId: string;
   rect: Rect;
   candidateRect?: Rect;
   content?: import("./content-bounds").ContentBounds;
 };
 export type Piece = {
+  bundleQuestionIds?: string[];
+  cleanPrint?: boolean;
   materialIds?: string[];
   dependencyIds?: string[];
   sectionId?: string;
@@ -40,8 +44,10 @@ export type ImportedDocument = {
   warnings: string[];
 };
 export type ColumnMode = "auto" | "1" | "2";
+export type PagePreview = { index: number; asset: ImageAsset };
 
 export type PendingQuestion = {
+  bundle?: import("../types").QuestionBundle;
   fragments?: StoredFragment[];
   extraAssets?: ImageAsset[];
   materialIds?: string[];

@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { RegistrationHeaderContext } from "@ui/documents/registration-header";
 import { X } from "lucide-react";
 import { useRegistrationHandler } from "../_handler/Registration.handler";
 import { useSessionHandler } from "@/screens/session/_handler/Session.handler";
@@ -9,9 +10,11 @@ import { useSessionHandler } from "@/screens/session/_handler/Session.handler";
 export function RegistrationModalAction({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { ready } = useSessionHandler(true);
-  const { rows, documents, reading, busy } = useRegistrationHandler();
+  const { rows, documents, reviewId, reading, busy } = useRegistrationHandler();
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(true);
+  const [headerTarget, setHeaderTarget] = useState<HTMLDivElement | null>(null);
+  const currentDocument = documents.find((doc) => doc.id === reviewId);
   const reduced = useReducedMotion();
   useEffect(() => {
     if (!ready) return;
@@ -73,16 +76,32 @@ export function RegistrationModalAction({ children }: { children: ReactNode }) {
               exit={{ y: reduced ? 0 : 16, scale: reduced ? 1 : 0.99 }}
               transition={{ duration: reduced ? 0 : 0.2 }}
             >
-              <button
-                className="icon registration-route-close"
-                aria-label="문제 등록 닫기"
-                disabled={busy}
-                onClick={close}
-                autoFocus
-              >
-                <X size={20} />
-              </button>
-              <div className="registration-route-content">{children}</div>
+              <header className="registration-route-heading">
+                <div className="registration-header-title">
+                  <span>문제 등록</span>
+                  {currentDocument && (
+                    <strong title={currentDocument.filename}>
+                      {currentDocument.filename}
+                    </strong>
+                  )}
+                </div>
+                <div
+                  className="registration-header-actions"
+                  ref={setHeaderTarget}
+                />
+                <button
+                  className="icon registration-route-close"
+                  aria-label="문제 등록 닫기"
+                  disabled={busy}
+                  onClick={close}
+                  autoFocus
+                >
+                  <X size={20} />
+                </button>
+              </header>
+              <RegistrationHeaderContext.Provider value={headerTarget}>
+                <div className="registration-route-content">{children}</div>
+              </RegistrationHeaderContext.Provider>
             </motion.section>
           </motion.div>
         )}

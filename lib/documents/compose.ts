@@ -1,3 +1,4 @@
+import { fragmentErasures } from "./print-cleanup";
 import type { ImportedDocument, PendingQuestion, Piece } from "./types";
 import { canvasAsset, imageFromBlob, checkCancelled } from "./import";
 import {
@@ -14,7 +15,7 @@ export async function composePiece(
 ): Promise<PendingQuestion> {
   const extraAssets: NonNullable<PendingQuestion["extraAssets"]> = [],
     fragments: NonNullable<PendingQuestion["fragments"]> = [];
-  for (const f of piece.fragments) {
+  for (const [index, f] of piece.fragments.entries()) {
     checkCancelled(signal);
     const page = doc.pages.find((p) => p.id === f.pageId);
     if (!page) throw new Error("원본 페이지를 찾을 수 없습니다.");
@@ -46,6 +47,18 @@ export async function composePiece(
       canvas.width,
       canvas.height,
     );
+    const erasures = fragmentErasures(page, piece, index);
+    ctx.fillStyle = "#fff";
+    for (const mask of erasures) {
+      const x = ((mask.x - r.x) / r.w) * canvas.width;
+      const y = ((mask.y - r.y) / r.h) * canvas.height;
+      ctx.fillRect(
+        x,
+        y,
+        (mask.w / r.w) * canvas.width,
+        (mask.h / r.h) * canvas.height,
+      );
+    }
     const asset = await canvasAsset(canvas);
     extraAssets.push(asset, page.asset);
     canvas.width = canvas.height = 1;
@@ -61,6 +74,7 @@ export async function composePiece(
       pageAssetId: page.asset.id,
       pageIndex: page.index,
       rect: r,
+      erasures,
       candidateRect: f.candidateRect,
       content: f.content,
       polygon: (

@@ -125,6 +125,7 @@ test("registration preserves engine fragment coordinates/order, shared identity 
     file = new File(["pdf"], "sample.pdf", { type: "application/pdf" }),
     doc = analysisToDocument(result, file);
   assert.equal(doc.engine, "pdf-regions");
+  assert.deepEqual(doc.pieces[0].bundleQuestionIds, ["q1", "q2"]);
   assert.equal(doc.original, file);
   assert.equal(doc.originalAssets?.[0].id, "original-0");
   assert.equal(doc.pages[0].asset.id, "processed-0");
@@ -141,11 +142,11 @@ test("registration preserves engine fragment coordinates/order, shared identity 
   );
   assert.deepEqual(q.fragments[1].rect, { x: 0.1, y: 0.4, w: 0.35, h: 0.15 });
 });
-test("selection includes required shared material once without selecting sibling questions", () => {
+test("fresh imports automatically select the passage and sibling questions as one unit", () => {
   const doc = analysisToDocument(fixture(), new File(["x"], "sample.pdf"));
   assert.deepEqual(
     selectedPiecesForRegistration(doc.pieces, ["q1"]).map((p) => p.id),
-    ["material", "q1"],
+    ["material", "q1", "q2"],
   );
   assert.deepEqual(
     selectedPiecesForRegistration(doc.pieces, ["q1", "q2"]).map((p) => p.id),

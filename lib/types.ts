@@ -2,6 +2,7 @@ import type { Matrix3, Point } from "./documents/registration-graph";
 import type { ImageAsset } from "./pdf-region-engine/base-types";
 export type { ImageAsset } from "./pdf-region-engine/base-types";
 export type StoredFragment = {
+  erasures?: import("./documents/types").Rect[];
   candidateRect?: { x: number; y: number; w: number; h: number };
   content?: import("./documents/content-bounds").ContentBounds;
   id: string;
@@ -29,7 +30,13 @@ export type StoredDocument = {
     evidence: "human";
   }[];
 };
+export type QuestionBundle = {
+  passageId: string;
+  questionIds: string[];
+  labels: string[];
+};
 export type Question = {
+  bundle?: QuestionBundle;
   fragments?: StoredFragment[];
   materialIds?: string[];
   dependencyIds?: string[];
@@ -59,6 +66,7 @@ export type Settings = {
   logoId?: string;
 };
 export type Snapshot = {
+  bundle?: QuestionBundle;
   id: string;
   name: string;
   assetId: string;

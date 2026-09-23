@@ -60,6 +60,7 @@ export type PdfAnalysisResult = StructureResult & {
   ocrPolicy: "adaptive" | "legacy";
 };
 export type PdfAnalysisOptions = {
+  onPageRendered?: (page: { index: number; asset: ImageAsset }) => void;
   maxPages?: number;
   removeInk: boolean;
   distributionOnly?: boolean;

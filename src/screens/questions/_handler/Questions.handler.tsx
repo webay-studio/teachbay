@@ -2,6 +2,7 @@
 import { createContext, useContext, type ReactNode } from "react";
 import { useCallback, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useRegistrationIntake } from "@/_state/RegistrationIntake";
 import { errorText } from "@engine/db";
 import type { Question } from "@engine/types";
 import { useQuestionsState } from "../_state/useQuestionsStore";
@@ -28,6 +29,7 @@ function useQuestionsController() {
     setEdit,
   } = state;
   const router = useRouter();
+  const intake = useRegistrationIntake();
   const pathname = usePathname();
   const pending = useRef(false);
   const refresh = useCallback(async () => {
@@ -93,6 +95,11 @@ function useQuestionsController() {
     setEdit({ ...question });
     setMenu(undefined);
   }
+  function registerFiles(files: File[]) {
+    if (!files.length) return;
+    intake.stage(files);
+    router.push("/questions/new", { scroll: false });
+  }
   return {
     ...state,
     filtered,
@@ -102,6 +109,7 @@ function useQuestionsController() {
     toggleQuestion,
     toggleVisible,
     openEdit,
+    registerFiles,
   };
 }
 

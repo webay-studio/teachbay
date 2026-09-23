@@ -25,6 +25,7 @@ export type Rect = {
 };
 export type TextLine = Rect & { text: string; confidence?: number };
 export type DocumentPage = {
+  printTokens?: (TextLine & { group?: string })[];
   diagnostics?: string[];
   ocrPasses?: { region: Rect; mode: string; lines: TextLine[] }[];
   sourceToAnalysis?: Matrix3;
@@ -38,6 +39,20 @@ export type DocumentPage = {
   warnings: string[];
 };
 export type ImportProgress = {
+  stage?:
+    | "rendering"
+    | "locating"
+    | "ocr-page"
+    | "ocr-detail"
+    | "ocr-column"
+    | "ocr-number-check"
+    | "ocr-number-zoom"
+    | "ocr-pagination"
+    | "ocr-loading"
+    | "ocr-reuse"
+    | "shape-check"
+    | "page-ready"
+    | "assembling";
   message: string;
   current: number;
   total: number;

@@ -1,7 +1,21 @@
+import { bundleOwner } from "./passage-bundles";
 import type { Piece } from "./types";
 export function reviewErrors(pieces: Piece[]): string[] {
   const errors: string[] = [];
+  const grouped = new Set<string>();
   for (const p of pieces) {
+    if (p.bundleQuestionIds?.length) {
+      if (p.kind !== "passage")
+        errors.push("지문만 문제 묶음을 가질 수 있습니다.");
+      for (const id of p.bundleQuestionIds) {
+        const q = pieces.find((x) => x.id === id && x.kind === "question");
+        if (!q || !q.materialIds?.includes(p.id))
+          errors.push(`${p.name}: 묶음의 문제 연결을 확인해주세요.`);
+        if (grouped.has(id))
+          errors.push("한 문제를 여러 지문 묶음에 넣을 수 없습니다.");
+        grouped.add(id);
+      }
+    }
     if (!p.confirmed) errors.push(`${p.name}: 경계·순서·연결을 확인해주세요.`);
     for (const id of p.materialIds ?? [])
       if (!pieces.some((x) => x.id === id && x.kind === "passage"))
@@ -28,7 +42,7 @@ export function reviewErrors(pieces: Piece[]): string[] {
   return errors;
 }
 
-/** Keep required shared material once; selecting one question never selects its siblings. */
+/** Explicit bundles are selected as one unit; ordinary material links remain independent. */
 export function selectedPiecesForRegistration(
   pieces: Piece[],
   ids: string[],
@@ -37,6 +51,12 @@ export function selectedPiecesForRegistration(
   const visit = (id: string) => {
     const piece = pieces.find((p) => p.id === id);
     for (const dependency of [
+      ...(bundleOwner(pieces, id)
+        ? [
+            bundleOwner(pieces, id)!.id,
+            ...bundleOwner(pieces, id)!.bundleQuestionIds!,
+          ]
+        : []),
       ...(piece?.materialIds ?? []),
       ...(piece?.dependencyIds ?? []),
     ]) {
